@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -17,7 +16,6 @@ const SITE_STATUS = "OFF";
 
 /* =================================
    INFO - DODAWANIE WPISÓW
-   Każdy tekst w cudzysłowie to osobna informacja
 ================================= */
 
 const INFO_ITEMS = [
@@ -30,6 +28,13 @@ const INFO_ITEMS = [
     "data premiery na yt.",
     "preorder limitowany na 3333 sztuk."
 ];
+
+/* =================================
+   ULUBIONE
+   Tutaj ustawiasz liczbę osób
+================================= */
+
+const FAVORITES_COUNT = 128;
 
 </script>
 
@@ -253,6 +258,66 @@ h1 {
     }
 }
 
+/* ULUBIONE */
+
+.favorite-section {
+    margin-top: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 13px;
+}
+
+.favorite-btn {
+    background: #202020;
+    border: 1px solid #383838;
+    color: #eeeeee;
+    padding: 11px 18px;
+    border-radius: 8px;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.favorite-btn:hover {
+    background: #2b2b2b;
+    border-color: #555;
+}
+
+.favorite-btn.active {
+    color: #a5e6b2;
+    border-color: #397a49;
+}
+
+.favorite-count {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #999;
+    font-size: 12px;
+    letter-spacing: 0.4px;
+}
+
+.favorite-dot {
+    width: 8px;
+    height: 8px;
+    min-width: 8px;
+    border-radius: 50%;
+    background: #174d29;
+    animation: greenDot 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes greenDot {
+    from {
+        background: #174d29;
+    }
+
+    to {
+        background: #65d982;
+    }
+}
+
 /* ZAMÓWIENIE */
 
 .ordered {
@@ -334,13 +399,11 @@ h1 {
     wróć o 22:22
 </div>
 
-
 <!-- BANER -->
 
 <div class="banner" id="banner">
     <img src="banerlost.png" alt="Lost Media Banner">
 </div>
-
 
 <!-- GŁOSÓWKI -->
 
@@ -368,7 +431,6 @@ h1 {
         </div>
     </div>
 
-
     <div class="voice-group">
 
         <div class="voice-label">
@@ -391,7 +453,6 @@ h1 {
         </div>
     </div>
 
-
     <!-- NAPIS POD OSTATNIĄ GŁOSÓWKĄ -->
 
     <div class="voice-footer" id="voiceFooter">
@@ -399,7 +460,6 @@ h1 {
     </div>
 
 </div>
-
 
 <!-- INFO -->
 
@@ -410,7 +470,6 @@ h1 {
     <div id="infoList"></div>
 
 </div>
-
 
 <!-- PRODUKT -->
 
@@ -425,10 +484,28 @@ h1 {
             alt="Lost Media"
             onclick="order()"
         >
+
+        <!-- ULUBIONE -->
+
+        <div class="favorite-section">
+
+            <button
+                class="favorite-btn"
+                id="favoriteBtn"
+                onclick="toggleFavorite()"
+            >
+                ☆ dodaj do ulubionych
+            </button>
+
+            <div class="favorite-count">
+                <span class="favorite-dot"></span>
+                <span id="favoriteCount"></span>
+            </div>
+
+        </div>
     </div>
 
 </div>
-
 
 <!-- ZAMÓWIENIE -->
 
@@ -440,7 +517,6 @@ h1 {
 
 </div>
 
-
 <script>
 
 /* USTAWIENIE TRYBU STRONY */
@@ -448,7 +524,6 @@ h1 {
 if (SITE_STATUS === "ON") {
     document.getElementById("maintenance").classList.add("active");
 }
-
 
 /* WYŚWIETLANIE INFO */
 
@@ -465,6 +540,50 @@ INFO_ITEMS.forEach(text => {
 
 });
 
+/* LICZNIK ULUBIONYCH */
+
+document.getElementById("favoriteCount").textContent =
+    FAVORITES_COUNT + " osób dodało do ulubionych";
+
+/* ZAPIS STANU ULUBIONYCH */
+
+let isFavorite = false;
+
+try {
+    isFavorite = localStorage.getItem("lostMediaFavorite") === "true";
+} catch (error) {
+    console.log("Nie można odczytać ulubionych.");
+}
+
+function updateFavoriteButton() {
+
+    const button = document.getElementById("favoriteBtn");
+
+    if (isFavorite) {
+        button.textContent = "★ dodano do ulubionych";
+        button.classList.add("active");
+    } else {
+        button.textContent = "☆ dodaj do ulubionych";
+        button.classList.remove("active");
+    }
+
+}
+
+function toggleFavorite() {
+
+    isFavorite = !isFavorite;
+
+    try {
+        localStorage.setItem("lostMediaFavorite", isFavorite);
+    } catch (error) {
+        console.log("Nie można zapisać ulubionych.");
+    }
+
+    updateFavoriteButton();
+
+}
+
+updateFavoriteButton();
 
 /* GŁOSÓWKI */
 
@@ -472,7 +591,6 @@ const audios = [
     document.getElementById("audio0"),
     document.getElementById("audio1")
 ];
-
 
 /* TWORZENIE FALI */
 
@@ -497,7 +615,6 @@ function createWave(id) {
 createWave(0);
 createWave(1);
 
-
 /* RESET */
 
 function resetVoice(id) {
@@ -515,7 +632,6 @@ function resetVoice(id) {
     document.getElementById("time" + id)
         .textContent = "00:00";
 }
-
 
 /* ODTWARZANIE */
 
@@ -549,7 +665,6 @@ function toggleVoice(id) {
     });
 }
 
-
 /* CZAS NAGRANIA */
 
 audios.forEach((audio, id) => {
@@ -570,7 +685,6 @@ audios.forEach((audio, id) => {
     });
 
 });
-
 
 /* ZAMÓWIENIE */
 
