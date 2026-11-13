@@ -15,6 +15,19 @@
 
 const SITE_STATUS = "OFF";
 
+/* =================================
+   INFO - DODAWANIE WPISÓW
+   Każdy tekst w cudzysłowie to osobna informacja
+================================= */
+
+const INFO_ITEMS = [
+    "20 utwórów",
+    "limitowane opakowanie preorderowe",
+    "płyta dostępa *tylko* w preorderze",
+    "możliwość wcześniejszego posłuchania płyty".
+    "data premiery na yt"
+];
+
 </script>
 
 <style>
@@ -176,6 +189,32 @@ body {
     margin-top: 0;
 }
 
+/* INFO */
+
+.info {
+    position: absolute;
+    top: 360px;
+    right: 25px;
+    width: 270px;
+}
+
+.info h1 {
+    font-size: 25px;
+    font-weight: normal;
+    text-transform: lowercase;
+    letter-spacing: 2px;
+    margin-bottom: 35px;
+    text-align: center;
+}
+
+.info-item {
+    color: #bdbdbd;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    margin-bottom: 18px;
+    text-align: left;
+}
+
 /* PRODUKT */
 
 .main {
@@ -265,6 +304,18 @@ h1 {
         width: min(270px, calc(100vw - 40px));
     }
 
+    .info {
+        position: relative;
+        top: auto;
+        right: auto;
+        width: auto;
+        margin: 35px 20px;
+    }
+
+    .info h1 {
+        text-align: left;
+    }
+
     .main {
         min-height: 50vh;
     }
@@ -292,8 +343,6 @@ h1 {
 
 <div class="voice-notes" id="voiceNotes">
 
-    <!-- GŁOSÓWKA 1 -->
-
     <div class="voice-group">
 
         <div class="voice-label">
@@ -316,8 +365,6 @@ h1 {
         </div>
     </div>
 
-
-    <!-- GŁOSÓWKA 2 -->
 
     <div class="voice-group">
 
@@ -347,6 +394,17 @@ h1 {
     <div class="voice-footer" id="voiceFooter">
         premiera na yt wkroo#c3ee.
     </div>
+
+</div>
+
+
+<!-- INFO -->
+
+<div class="info" id="info">
+
+    <h1>info</h1>
+
+    <div id="infoList"></div>
 
 </div>
 
@@ -387,6 +445,22 @@ h1 {
 if (SITE_STATUS === "ON") {
     document.getElementById("maintenance").classList.add("active");
 }
+
+
+/* WYŚWIETLANIE INFO */
+
+const infoList = document.getElementById("infoList");
+
+INFO_ITEMS.forEach(text => {
+
+    const item = document.createElement("div");
+
+    item.className = "info-item";
+    item.textContent = text;
+
+    infoList.appendChild(item);
+
+});
 
 
 /* GŁOSÓWKI */
@@ -506,6 +580,7 @@ function order() {
     document.getElementById("main").style.display = "none";
     document.getElementById("banner").style.display = "none";
     document.getElementById("voiceNotes").style.display = "none";
+    document.getElementById("info").style.display = "none";
     document.getElementById("ordered").style.display = "flex";
 
 }
