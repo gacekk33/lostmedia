@@ -135,6 +135,16 @@ body {
     margin-top: 3px;
 }
 
+/* NAPIS POD GŁOSÓWKAMI */
+
+.voice-footer {
+    color: #bdbdbd;
+    font-size: 13px;
+    font-weight: normal;
+    letter-spacing: 0.5px;
+    margin-top: 0;
+}
+
 /* PRODUKT */
 
 .main {
@@ -239,9 +249,12 @@ h1 {
     <img src="banerlost.png" alt="Lost Media Banner">
 </div>
 
+
 <!-- GŁOSÓWKI -->
 
 <div class="voice-notes" id="voiceNotes">
+
+    <!-- GŁOSÓWKA 1 -->
 
     <div class="voice-group">
 
@@ -265,10 +278,13 @@ h1 {
         </div>
     </div>
 
+
+    <!-- GŁOSÓWKA 2 -->
+
     <div class="voice-group">
 
         <div class="voice-label">
-            za każdym ra2em snippet
+            za każdym razem snippet
         </div>
 
         <div class="voice-note">
@@ -287,7 +303,15 @@ h1 {
         </div>
     </div>
 
+
+    <!-- NAPIS POD OSTATNIĄ GŁOSÓWKĄ -->
+
+    <div class="voice-footer" id="voiceFooter">
+        za każdym ra2em na sucho wkroot3c#wee33e.
+    </div>
+
 </div>
+
 
 <!-- PRODUKT -->
 
@@ -306,6 +330,7 @@ h1 {
 
 </div>
 
+
 <!-- ZAMÓWIENIE -->
 
 <div class="ordered" id="ordered">
@@ -316,6 +341,7 @@ h1 {
 
 </div>
 
+
 <script>
 
 /* GŁOSÓWKI */
@@ -324,6 +350,7 @@ const audios = [
     document.getElementById("audio0"),
     document.getElementById("audio1")
 ];
+
 
 /* TWORZENIE FALI */
 
@@ -348,6 +375,7 @@ function createWave(id) {
 createWave(0);
 createWave(1);
 
+
 /* RESET */
 
 function resetVoice(id) {
@@ -365,6 +393,7 @@ function resetVoice(id) {
     document.getElementById("time" + id)
         .textContent = "00:00";
 }
+
 
 /* ODTWARZANIE */
 
@@ -398,6 +427,7 @@ function toggleVoice(id) {
     });
 }
 
+
 /* CZAS NAGRANIA */
 
 audios.forEach((audio, id) => {
@@ -418,6 +448,7 @@ audios.forEach((audio, id) => {
     });
 
 });
+
 
 /* ZAMÓWIENIE */
 
