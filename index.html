@@ -7,111 +7,136 @@
 <title>LOST MEDIA</title>
 
 <style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-    body {
-        background: #080808;
-        color: white;
-        min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-family: Arial, sans-serif;
-    }
+body {
+    background: #080808;
+    color: white;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+}
 
-    .container {
-        text-align: center;
-        transition: opacity 0.5s ease;
-    }
+/* BANER */
+.banner {
+    width: 100%;
+    margin-top: 20px;
+    padding: 0 20px;
+}
 
-    h1 {
-        font-size: 25px;
-        font-weight: normal;
-        text-transform: lowercase;
-        letter-spacing: 2px;
-        margin-bottom: 35px;
-    }
+.banner img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 300px;
+    object-fit: cover;
+}
 
-    .product {
-        width: 300px;
-        max-width: 80vw;
-        cursor: pointer;
-        animation: pulse 2s ease-in-out infinite;
-        transition: filter 0.3s;
-    }
+/* PRODUKT */
+.main {
+    min-height: 65vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    transition: opacity 0.5s ease;
+}
 
-    .product:hover {
-        filter: brightness(1.15);
-    }
+h1 {
+    font-size: 25px;
+    font-weight: normal;
+    text-transform: lowercase;
+    letter-spacing: 2px;
+    margin-bottom: 35px;
+}
 
-    @keyframes pulse {
-        0%, 100% {
-            transform: scale(1);
-        }
-        50% {
-            transform: scale(1.1);
-        }
-    }
+.product {
+    width: 300px;
+    max-width: 80vw;
+    cursor: pointer;
+    animation: pulse 2s ease-in-out infinite;
+}
 
-    .ordered {
-        display: none;
-        text-align: center;
-        animation: appear 1s ease;
-    }
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
 
-    .ordered h2 {
-        font-size: 30px;
-        letter-spacing: 3px;
-        font-weight: normal;
-        margin-bottom: 15px;
-    }
+/* ZAMÓWIENIE */
+.ordered {
+    display: none;
+    position: fixed;
+    inset: 0;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background: #080808;
+    text-align: center;
+    animation: appear 1s ease;
+}
 
-    .ordered p {
-        color: #999;
-        font-size: 15px;
-        letter-spacing: 1px;
-    }
+.ordered h2 {
+    font-size: 30px;
+    letter-spacing: 3px;
+    font-weight: normal;
+    margin-bottom: 15px;
+}
 
-    @keyframes appear {
-        from {
-            opacity: 0;
-            transform: scale(0.9);
-        }
-        to {
-            opacity: 1;
-            transform: scale(1);
-        }
+.ordered p {
+    color: #999;
+    font-size: 15px;
+    letter-spacing: 1px;
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
     }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
 </style>
 </head>
 
 <body>
 
-<div class="container" id="main">
-    <h1>kup płyte lost media</h1>
-
-    <img
-        src="lostmedia.jpg"
-        class="product"
-        alt="Lost Media"
-        onclick="order()"
-    >
+<!-- BANER -->
+<div class="banner">
+    <img src="banerlost.png" alt="Lost Media Banner">
 </div>
 
+<!-- PRODUKT -->
+<div class="main" id="main">
+    <div>
+        <h1>kup płyte lost media</h1>
+
+        <img
+            src="lostmedia.png"
+            class="product"
+            alt="Lost Media"
+            onclick="order()"
+        >
+    </div>
+</div>
+
+<!-- ZAMÓWIENIE -->
 <div class="ordered" id="ordered">
     <h2>ZAMÓWIONO</h2>
     <p>paczka dojdzie 11.12.26</p>
 </div>
 
 <script>
-    function order() {
-        document.getElementById("main").style.display = "none";
-        document.getElementById("ordered").style.display = "block";
-    }
+function order() {
+    document.getElementById("main").style.display = "none";
+    document.querySelector(".banner").style.display = "none";
+    document.getElementById("ordered").style.display = "flex";
+}
 </script>
 
 </body>
