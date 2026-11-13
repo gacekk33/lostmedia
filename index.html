@@ -21,6 +21,7 @@ body {
 }
 
 /* BANER */
+
 .banner {
     width: 100%;
     margin-top: 20px;
@@ -35,14 +36,113 @@ body {
     object-fit: cover;
 }
 
+/* GŁOSÓWKI */
+
+.voice-notes {
+    position: absolute;
+    top: 360px;
+    left: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    z-index: 5;
+}
+
+.voice-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.voice-label {
+    font-size: 13px;
+    font-weight: normal;
+    color: #bdbdbd;
+    letter-spacing: 0.5px;
+}
+
+.voice-note {
+    width: 270px;
+    height: 65px;
+    background: #202020;
+    border: 1px solid #383838;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    padding: 10px 13px;
+    gap: 12px;
+}
+
+.play-btn {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    border: none;
+    border-radius: 50%;
+    background: #eeeeee;
+    color: #111;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.play-btn:hover {
+    background: #cccccc;
+}
+
+.voice-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.waveform {
+    height: 27px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2px;
+    overflow: hidden;
+}
+
+.waveform span {
+    width: 3px;
+    min-width: 2px;
+    background: #aaa;
+    border-radius: 5px;
+    height: var(--bar-height);
+}
+
+.waveform.playing span {
+    animation: wave 0.7s ease-in-out infinite alternate;
+}
+
+.waveform.playing span:nth-child(2n) {
+    animation-delay: 0.2s;
+}
+
+.waveform.playing span:nth-child(3n) {
+    animation-delay: 0.4s;
+}
+
+@keyframes wave {
+    from { transform: scaleY(0.5); }
+    to { transform: scaleY(1.2); }
+}
+
+.voice-time {
+    color: #999;
+    font-size: 10px;
+    display: block;
+    margin-top: 3px;
+}
+
 /* PRODUKT */
+
 .main {
     min-height: 65vh;
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
-    transition: opacity 0.5s ease;
 }
 
 h1 {
@@ -61,11 +161,17 @@ h1 {
 }
 
 @keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.1); }
+    0%, 100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
 }
 
 /* ZAMÓWIENIE */
+
 .ordered {
     display: none;
     position: fixed;
@@ -76,6 +182,7 @@ h1 {
     background: #080808;
     text-align: center;
     animation: appear 1s ease;
+    z-index: 20;
 }
 
 .ordered h2 {
@@ -96,9 +203,29 @@ h1 {
         opacity: 0;
         transform: scale(0.9);
     }
+
     to {
         opacity: 1;
         transform: scale(1);
+    }
+}
+
+/* TELEFONY */
+
+@media (max-width: 600px) {
+    .voice-notes {
+        position: relative;
+        top: auto;
+        left: auto;
+        margin: 20px;
+    }
+
+    .voice-note {
+        width: min(270px, calc(100vw - 40px));
+    }
+
+    .main {
+        min-height: 50vh;
     }
 }
 </style>
@@ -107,12 +234,65 @@ h1 {
 <body>
 
 <!-- BANER -->
-<div class="banner">
+
+<div class="banner" id="banner">
     <img src="banerlost.png" alt="Lost Media Banner">
 </div>
 
+<!-- GŁOSÓWKI -->
+
+<div class="voice-notes" id="voiceNotes">
+
+    <div class="voice-group">
+
+        <div class="voice-label">
+            red alabaster full
+        </div>
+
+        <div class="voice-note">
+
+            <button class="play-btn" onclick="toggleVoice(0)">
+                ▶
+            </button>
+
+            <div class="voice-content">
+                <div class="waveform" id="wave0"></div>
+                <span class="voice-time" id="time0">00:00</span>
+            </div>
+
+            <audio id="audio0" src="redalabaster.mp3" preload="metadata"></audio>
+
+        </div>
+    </div>
+
+    <div class="voice-group">
+
+        <div class="voice-label">
+            za każdym razem snippet
+        </div>
+
+        <div class="voice-note">
+
+            <button class="play-btn" onclick="toggleVoice(1)">
+                ▶
+            </button>
+
+            <div class="voice-content">
+                <div class="waveform" id="wave1"></div>
+                <span class="voice-time" id="time1">00:00</span>
+            </div>
+
+            <audio id="audio1" src="snippet1.mp3" preload="metadata"></audio>
+
+        </div>
+    </div>
+
+</div>
+
 <!-- PRODUKT -->
+
 <div class="main" id="main">
+
     <div>
         <h1>kup płyte lost media</h1>
 
@@ -123,20 +303,137 @@ h1 {
             onclick="order()"
         >
     </div>
+
 </div>
 
 <!-- ZAMÓWIENIE -->
+
 <div class="ordered" id="ordered">
+
     <h2>ZAMÓWIONO</h2>
+
     <p>paczka dojdzie 11.12.26</p>
+
 </div>
 
 <script>
-function order() {
-    document.getElementById("main").style.display = "none";
-    document.querySelector(".banner").style.display = "none";
-    document.getElementById("ordered").style.display = "flex";
+
+/* GŁOSÓWKI */
+
+const audios = [
+    document.getElementById("audio0"),
+    document.getElementById("audio1")
+];
+
+/* TWORZENIE FALI */
+
+function createWave(id) {
+
+    const wave = document.getElementById("wave" + id);
+
+    for (let i = 0; i < 38; i++) {
+
+        const bar = document.createElement("span");
+        const height = 5 + Math.random() * 19;
+
+        bar.style.setProperty(
+            "--bar-height",
+            height + "px"
+        );
+
+        wave.appendChild(bar);
+    }
 }
+
+createWave(0);
+createWave(1);
+
+/* RESET */
+
+function resetVoice(id) {
+
+    const audio = audios[id];
+
+    audio.pause();
+    audio.currentTime = 0;
+
+    document.querySelectorAll(".play-btn")[id].textContent = "▶";
+
+    document.getElementById("wave" + id)
+        .classList.remove("playing");
+
+    document.getElementById("time" + id)
+        .textContent = "00:00";
+}
+
+/* ODTWARZANIE */
+
+function toggleVoice(id) {
+
+    const audio = audios[id];
+
+    if (!audio.paused) {
+        resetVoice(id);
+        return;
+    }
+
+    audios.forEach((other, i) => {
+        resetVoice(i);
+    });
+
+    audio.currentTime = 0;
+
+    audio.play().then(() => {
+
+        document.querySelectorAll(".play-btn")[id]
+            .textContent = "Ⅱ";
+
+        document.getElementById("wave" + id)
+            .classList.add("playing");
+
+    }).catch(error => {
+
+        console.log("Błąd odtwarzania:", error);
+
+    });
+}
+
+/* CZAS NAGRANIA */
+
+audios.forEach((audio, id) => {
+
+    audio.addEventListener("timeupdate", () => {
+
+        const minutes = Math.floor(audio.currentTime / 60);
+        const seconds = Math.floor(audio.currentTime % 60);
+
+        document.getElementById("time" + id).textContent =
+            String(minutes).padStart(2, "0") + ":" +
+            String(seconds).padStart(2, "0");
+
+    });
+
+    audio.addEventListener("ended", () => {
+        resetVoice(id);
+    });
+
+});
+
+/* ZAMÓWIENIE */
+
+function order() {
+
+    audios.forEach((audio, id) => {
+        resetVoice(id);
+    });
+
+    document.getElementById("main").style.display = "none";
+    document.getElementById("banner").style.display = "none";
+    document.getElementById("voiceNotes").style.display = "none";
+    document.getElementById("ordered").style.display = "flex";
+
+}
+
 </script>
 
 </body>
