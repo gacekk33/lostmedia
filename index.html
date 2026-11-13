@@ -1,0 +1,118 @@
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LOST MEDIA</title>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background: #080808;
+        color: white;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: Arial, sans-serif;
+    }
+
+    .container {
+        text-align: center;
+        transition: opacity 0.5s ease;
+    }
+
+    h1 {
+        font-size: 25px;
+        font-weight: normal;
+        text-transform: lowercase;
+        letter-spacing: 2px;
+        margin-bottom: 35px;
+    }
+
+    .product {
+        width: 300px;
+        max-width: 80vw;
+        cursor: pointer;
+        animation: pulse 2s ease-in-out infinite;
+        transition: filter 0.3s;
+    }
+
+    .product:hover {
+        filter: brightness(1.15);
+    }
+
+    @keyframes pulse {
+        0%, 100% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.1);
+        }
+    }
+
+    .ordered {
+        display: none;
+        text-align: center;
+        animation: appear 1s ease;
+    }
+
+    .ordered h2 {
+        font-size: 30px;
+        letter-spacing: 3px;
+        font-weight: normal;
+        margin-bottom: 15px;
+    }
+
+    .ordered p {
+        color: #999;
+        font-size: 15px;
+        letter-spacing: 1px;
+    }
+
+    @keyframes appear {
+        from {
+            opacity: 0;
+            transform: scale(0.9);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container" id="main">
+    <h1>kup płyte lost media</h1>
+
+    <img
+        src="lostmedia.png"
+        class="product"
+        alt="Lost Media"
+        onclick="order()"
+    >
+</div>
+
+<div class="ordered" id="ordered">
+    <h2>ZAMÓWIONO</h2>
+    <p>paczka dojdzie 11.12.26</p>
+</div>
+
+<script>
+    function order() {
+        document.getElementById("main").style.display = "none";
+        document.getElementById("ordered").style.display = "block";
+    }
+</script>
+
+</body>
+</html>
