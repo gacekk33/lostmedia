@@ -6,17 +6,7 @@
 <title>LOST MEDIA</title>
 
 <script>
-/* =================================
-   USTAWIENIA STRONY
-   ON = strona wyłączona
-   OFF = strona działa normalnie
-================================= */
-
 const SITE_STATUS = "OFF";
-
-/* =================================
-   INFO - DODAWANIE WPISÓW
-================================= */
 
 const INFO_ITEMS = [
     "jak kupisz to masz:",
@@ -29,13 +19,15 @@ const INFO_ITEMS = [
     "preorder limitowany na 3333 sztuk."
 ];
 
-/* =================================
-   ULUBIONE
-   Tutaj ustawiasz liczbę osób
-================================= */
+/* INFO WIDOCZNE PO KLIKNIĘCIU OKŁADKI */
 
-const FAVORITES_COUNT = 616;
+const ORDER_INFO_ITEMS = [
+    "przykladowy tekst"
+];
 
+/* LICZNIK ULUBIONYCH */
+
+const FAVORITES_COUNT = 128;
 </script>
 
 <style>
@@ -63,7 +55,6 @@ body {
     align-items: center;
     z-index: 99999;
     color: white;
-    font-family: Arial, sans-serif;
     font-size: 22px;
     letter-spacing: 1px;
 }
@@ -108,7 +99,6 @@ body {
 
 .voice-label {
     font-size: 13px;
-    font-weight: normal;
     color: #bdbdbd;
     letter-spacing: 0.5px;
 }
@@ -187,17 +177,13 @@ body {
     margin-top: 3px;
 }
 
-/* NAPIS POD GŁOSÓWKAMI */
-
 .voice-footer {
     color: #bdbdbd;
     font-size: 13px;
-    font-weight: normal;
     letter-spacing: 0.5px;
-    margin-top: 0;
 }
 
-/* INFO */
+/* INFO NA STRONIE GŁÓWNEJ */
 
 .info {
     position: absolute;
@@ -206,7 +192,8 @@ body {
     width: 270px;
 }
 
-.info h1 {
+.info h1,
+.order-info h3 {
     font-size: 25px;
     font-weight: normal;
     text-transform: lowercase;
@@ -249,13 +236,8 @@ h1 {
 }
 
 @keyframes pulse {
-    0%, 100% {
-        transform: scale(1);
-    }
-
-    50% {
-        transform: scale(1.1);
-    }
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
 }
 
 /* ULUBIONE */
@@ -309,16 +291,11 @@ h1 {
 }
 
 @keyframes greenDot {
-    from {
-        background: #174d29;
-    }
-
-    to {
-        background: #65d982;
-    }
+    from { background: #174d29; }
+    to { background: #65d982; }
 }
 
-/* ZAMÓWIENIE */
+/* EKRAN PO KLIKNIĘCIU OKŁADKI */
 
 .ordered {
     display: none;
@@ -331,6 +308,8 @@ h1 {
     text-align: center;
     animation: appear 1s ease;
     z-index: 20;
+    overflow-y: auto;
+    padding: 40px 20px;
 }
 
 .ordered h2 {
@@ -346,12 +325,27 @@ h1 {
     letter-spacing: 1px;
 }
 
+.order-info {
+    margin-top: 45px;
+    width: 100%;
+    max-width: 350px;
+    text-align: left;
+}
+
+.order-info h3 {
+    text-align: left;
+    margin-bottom: 25px;
+}
+
+.order-info .info-item {
+    margin-bottom: 18px;
+}
+
 @keyframes appear {
     from {
         opacity: 0;
         transform: scale(0.9);
     }
-
     to {
         opacity: 1;
         transform: scale(1);
@@ -393,8 +387,6 @@ h1 {
 
 <body>
 
-<!-- EKRAN OFFLINE -->
-
 <div class="maintenance" id="maintenance">
     wróć o 22:22
 </div>
@@ -410,16 +402,10 @@ h1 {
 <div class="voice-notes" id="voiceNotes">
 
     <div class="voice-group">
-
-        <div class="voice-label">
-            red alabaster full
-        </div>
+        <div class="voice-label">red alabaster full</div>
 
         <div class="voice-note">
-
-            <button class="play-btn" onclick="toggleVoice(0)">
-                ▶
-            </button>
+            <button class="play-btn" onclick="toggleVoice(0)">▶</button>
 
             <div class="voice-content">
                 <div class="waveform" id="wave0"></div>
@@ -427,21 +413,14 @@ h1 {
             </div>
 
             <audio id="audio0" src="redalabaster.mp3" preload="metadata"></audio>
-
         </div>
     </div>
 
     <div class="voice-group">
-
-        <div class="voice-label">
-            za każdym ra2em snippet
-        </div>
+        <div class="voice-label">za każdym ra2em snippet</div>
 
         <div class="voice-note">
-
-            <button class="play-btn" onclick="toggleVoice(1)">
-                ▶
-            </button>
+            <button class="play-btn" onclick="toggleVoice(1)">▶</button>
 
             <div class="voice-content">
                 <div class="waveform" id="wave1"></div>
@@ -449,11 +428,8 @@ h1 {
             </div>
 
             <audio id="audio1" src="snippet1.mp3" preload="metadata"></audio>
-
         </div>
     </div>
-
-    <!-- NAPIS POD OSTATNIĄ GŁOSÓWKĄ -->
 
     <div class="voice-footer" id="voiceFooter">
         premiera na yt wkroo#c3ee.
@@ -461,20 +437,16 @@ h1 {
 
 </div>
 
-<!-- INFO -->
+<!-- INFO 1 - STRONA GŁÓWNA -->
 
 <div class="info" id="info">
-
     <h1>info</h1>
-
     <div id="infoList"></div>
-
 </div>
 
 <!-- PRODUKT -->
 
 <div class="main" id="main">
-
     <div>
         <h1>kup płyte lost media</h1>
 
@@ -484,8 +456,6 @@ h1 {
             alt="Lost Media"
             onclick="order()"
         >
-
-        <!-- ULUBIONE -->
 
         <div class="favorite-section">
 
@@ -504,10 +474,9 @@ h1 {
 
         </div>
     </div>
-
 </div>
 
-<!-- ZAMÓWIENIE -->
+<!-- EKRAN PO KLIKNIĘCIU OKŁADKI -->
 
 <div class="ordered" id="ordered">
 
@@ -515,29 +484,43 @@ h1 {
 
     <p>19.11 za każdym ra2em full</p>
 
+    <!-- INFO 2 - OSOBNA LISTA -->
+
+    <div class="order-info">
+        <h3>info</h3>
+        <div id="orderInfoList"></div>
+    </div>
+
 </div>
 
 <script>
 
-/* USTAWIENIE TRYBU STRONY */
+/* TRYB STRONY */
 
 if (SITE_STATUS === "ON") {
     document.getElementById("maintenance").classList.add("active");
 }
 
-/* WYŚWIETLANIE INFO */
+/* INFO 1 */
 
 const infoList = document.getElementById("infoList");
 
 INFO_ITEMS.forEach(text => {
-
     const item = document.createElement("div");
-
     item.className = "info-item";
     item.textContent = text;
-
     infoList.appendChild(item);
+});
 
+/* INFO 2 */
+
+const orderInfoList = document.getElementById("orderInfoList");
+
+ORDER_INFO_ITEMS.forEach(text => {
+    const item = document.createElement("div");
+    item.className = "info-item";
+    item.textContent = text;
+    orderInfoList.appendChild(item);
 });
 
 /* LICZNIK ULUBIONYCH */
@@ -545,7 +528,7 @@ INFO_ITEMS.forEach(text => {
 document.getElementById("favoriteCount").textContent =
     FAVORITES_COUNT + " osób dodało do ulubionych";
 
-/* ZAPIS STANU ULUBIONYCH */
+/* ULUBIONE */
 
 let isFavorite = false;
 
@@ -556,7 +539,6 @@ try {
 }
 
 function updateFavoriteButton() {
-
     const button = document.getElementById("favoriteBtn");
 
     if (isFavorite) {
@@ -566,11 +548,9 @@ function updateFavoriteButton() {
         button.textContent = "☆ dodaj do ulubionych";
         button.classList.remove("active");
     }
-
 }
 
 function toggleFavorite() {
-
     isFavorite = !isFavorite;
 
     try {
@@ -580,7 +560,6 @@ function toggleFavorite() {
     }
 
     updateFavoriteButton();
-
 }
 
 updateFavoriteButton();
@@ -595,19 +574,13 @@ const audios = [
 /* TWORZENIE FALI */
 
 function createWave(id) {
-
     const wave = document.getElementById("wave" + id);
 
     for (let i = 0; i < 38; i++) {
-
         const bar = document.createElement("span");
         const height = 5 + Math.random() * 19;
 
-        bar.style.setProperty(
-            "--bar-height",
-            height + "px"
-        );
-
+        bar.style.setProperty("--bar-height", height + "px");
         wave.appendChild(bar);
     }
 }
@@ -618,7 +591,6 @@ createWave(1);
 /* RESET */
 
 function resetVoice(id) {
-
     const audio = audios[id];
 
     audio.pause();
@@ -636,7 +608,6 @@ function resetVoice(id) {
 /* ODTWARZANIE */
 
 function toggleVoice(id) {
-
     const audio = audios[id];
 
     if (!audio.paused) {
@@ -651,7 +622,6 @@ function toggleVoice(id) {
     audio.currentTime = 0;
 
     audio.play().then(() => {
-
         document.querySelectorAll(".play-btn")[id]
             .textContent = "Ⅱ";
 
@@ -659,37 +629,30 @@ function toggleVoice(id) {
             .classList.add("playing");
 
     }).catch(error => {
-
         console.log("Błąd odtwarzania:", error);
-
     });
 }
 
 /* CZAS NAGRANIA */
 
 audios.forEach((audio, id) => {
-
     audio.addEventListener("timeupdate", () => {
-
         const minutes = Math.floor(audio.currentTime / 60);
         const seconds = Math.floor(audio.currentTime % 60);
 
         document.getElementById("time" + id).textContent =
             String(minutes).padStart(2, "0") + ":" +
             String(seconds).padStart(2, "0");
-
     });
 
     audio.addEventListener("ended", () => {
         resetVoice(id);
     });
-
 });
 
-/* ZAMÓWIENIE */
+/* ZAMÓWIENIE / PRZEJŚCIE DO INFO 2 */
 
 function order() {
-
     audios.forEach((audio, id) => {
         resetVoice(id);
     });
@@ -699,7 +662,6 @@ function order() {
     document.getElementById("voiceNotes").style.display = "none";
     document.getElementById("info").style.display = "none";
     document.getElementById("ordered").style.display = "flex";
-
 }
 
 </script>
