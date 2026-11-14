@@ -12,7 +12,7 @@ const INFO_ITEMS = [
     "19.11🤫...",
 ];
 
-/* INFO WIDOCZNE PO KLIKNIĘCIU OKŁADKI */
+/* INFO PŁYTY */
 
 const ORDER_INFO_ITEMS = [
     "jak kupisz to masz:",
@@ -23,6 +23,12 @@ const ORDER_INFO_ITEMS = [
     "możliwość wcześniejszego posłuchania płyty.",
     "data premiery na yt.",
     "preorder limitowany na 3333 sztuk."
+];
+
+/* INFO KOSZULKI */
+
+const SHIRT_INFO_ITEMS = [
+    "przykładowy tekst"
 ];
 
 /* LICZNIK ULUBIONYCH */
@@ -210,7 +216,7 @@ body {
     text-align: left;
 }
 
-/* PRODUKT */
+/* PRODUKTY */
 
 .main {
     min-height: 65vh;
@@ -220,12 +226,30 @@ body {
     text-align: center;
 }
 
-h1 {
+.products {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 100px;
+    padding: 30px 20px;
+}
+
+.product-card {
+    width: 330px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.product-title {
     font-size: 25px;
     font-weight: normal;
     text-transform: lowercase;
     letter-spacing: 2px;
     margin-bottom: 35px;
+    white-space: nowrap;
 }
 
 .product {
@@ -295,7 +319,7 @@ h1 {
     to { background: #65d982; }
 }
 
-/* EKRAN PO KLIKNIĘCIU OKŁADKI */
+/* EKRANY PRODUKTÓW */
 
 .ordered {
     display: none;
@@ -354,6 +378,20 @@ h1 {
 
 /* TELEFONY */
 
+@media (max-width: 850px) {
+    .products {
+        gap: 45px;
+    }
+
+    .product-card {
+        width: 280px;
+    }
+
+    .product-title {
+        font-size: 20px;
+    }
+}
+
 @media (max-width: 600px) {
     .voice-notes {
         position: relative;
@@ -380,6 +418,22 @@ h1 {
 
     .main {
         min-height: 50vh;
+    }
+
+    .products {
+        flex-direction: column;
+        gap: 75px;
+        padding: 45px 15px;
+    }
+
+    .product-card {
+        width: 100%;
+    }
+
+    .product-title {
+        font-size: 22px;
+        white-space: normal;
+        margin-bottom: 30px;
     }
 }
 </style>
@@ -437,50 +491,75 @@ h1 {
 
 </div>
 
-<!-- INFO 1 - STRONA GŁÓWNA -->
+<!-- INFO STRONA GŁÓWNA -->
 
 <div class="info" id="info">
     <h1>info</h1>
     <div id="infoList"></div>
 </div>
 
-<!-- PRODUKT -->
+<!-- PRODUKTY -->
 
 <div class="main" id="main">
-    <div>
-        <h1>kup płyte lost media</h1>
 
-        <img
-            src="lostmedia.jpg"
-            class="product"
-            alt="Lost Media"
-            onclick="order()"
-        >
+    <div class="products">
 
-        <div class="favorite-section">
+        <!-- PŁYTA -->
 
-            <button
-                class="favorite-btn"
-                id="favoriteBtn"
-                onclick="toggleFavorite()"
+        <div class="product-card">
+
+            <h1 class="product-title">kup płyte lost media</h1>
+
+            <img
+                src="lostmedia.jpg"
+                class="product"
+                alt="Lost Media"
+                onclick="order('album')"
             >
-                ☆ dodaj do ulubionych
-            </button>
 
-            <div class="favorite-count">
-                <span class="favorite-dot"></span>
-                <span id="favoriteCount"></span>
+            <div class="favorite-section">
+
+                <button
+                    class="favorite-btn"
+                    id="favoriteBtn"
+                    onclick="toggleFavorite()"
+                >
+                    ☆ dodaj do ulubionych
+                </button>
+
+                <div class="favorite-count">
+                    <span class="favorite-dot"></span>
+                    <span id="favoriteCount"></span>
+                </div>
+
             </div>
 
         </div>
+
+        <!-- KOSZULKA -->
+
+        <div class="product-card">
+
+            <h1 class="product-title">kup koszulke lost media</h1>
+
+            <img
+                src="koszulka1.png"
+                class="product"
+                alt="Koszulka Lost Media"
+                onclick="order('shirt')"
+            >
+
+        </div>
+
     </div>
+
 </div>
 
-<!-- EKRAN PO KLIKNIĘCIU OKŁADKI -->
+<!-- EKRAN PŁYTY -->
 
-<div class="ordered" id="ordered">
+<div class="ordered" id="albumOrder">
 
-    <h2>dostępne 19.11.26</h2>
+    <h2>dostępne 19.11</h2>
 
     <p>19.11 za każdym ra2em full</p>
 
@@ -491,7 +570,22 @@ h1 {
 
 </div>
 
-<!-- DŹWIĘK PO KLIKNIĘCIU OKŁADKI -->
+<!-- EKRAN KOSZULKI -->
+
+<div class="ordered" id="shirtOrder">
+
+    <h2>dostępne 19.11</h2>
+
+    <p>19.11 za każdym ra2em full</p>
+
+    <div class="order-info">
+        <h3>info</h3>
+        <div id="shirtInfoList"></div>
+    </div>
+
+</div>
+
+<!-- DŹWIĘK -->
 
 <audio id="okaySound" src="okay.mp3" preload="auto"></audio>
 
@@ -503,27 +597,24 @@ if (SITE_STATUS === "ON") {
     document.getElementById("maintenance").classList.add("active");
 }
 
-/* INFO 1 */
+/* FUNKCJA WYŚWIETLANIA INFO */
 
-const infoList = document.getElementById("infoList");
+function displayInfo(items, elementId) {
+    const list = document.getElementById(elementId);
 
-INFO_ITEMS.forEach(text => {
-    const item = document.createElement("div");
-    item.className = "info-item";
-    item.textContent = text;
-    infoList.appendChild(item);
-});
+    items.forEach(text => {
+        const item = document.createElement("div");
+        item.className = "info-item";
+        item.textContent = text;
+        list.appendChild(item);
+    });
+}
 
-/* INFO 2 */
+/* INFO */
 
-const orderInfoList = document.getElementById("orderInfoList");
-
-ORDER_INFO_ITEMS.forEach(text => {
-    const item = document.createElement("div");
-    item.className = "info-item";
-    item.textContent = text;
-    orderInfoList.appendChild(item);
-});
+displayInfo(INFO_ITEMS, "infoList");
+displayInfo(ORDER_INFO_ITEMS, "orderInfoList");
+displayInfo(SHIRT_INFO_ITEMS, "shirtInfoList");
 
 /* LICZNIK ULUBIONYCH */
 
@@ -590,7 +681,7 @@ function createWave(id) {
 createWave(0);
 createWave(1);
 
-/* RESET */
+/* RESET GŁOSÓWEK */
 
 function resetVoice(id) {
     const audio = audios[id];
@@ -607,7 +698,7 @@ function resetVoice(id) {
         .textContent = "00:00";
 }
 
-/* ODTWARZANIE */
+/* ODTWARZANIE GŁOSÓWEK */
 
 function toggleVoice(id) {
     const audio = audios[id];
@@ -695,7 +786,6 @@ async function playOkaySound() {
     } catch (error) {
         console.log("Błąd odtwarzania okay.mp3:", error);
 
-        // Awaryjne odtworzenie bez dodatkowego wzmocnienia
         sound.volume = 1;
         sound.currentTime = 0;
 
@@ -705,9 +795,9 @@ async function playOkaySound() {
     }
 }
 
-/* ZAMÓWIENIE / PRZEJŚCIE DO INFO 2 */
+/* OTWIERANIE PRODUKTÓW */
 
-function order() {
+function order(type) {
 
     audios.forEach((audio, id) => {
         resetVoice(id);
@@ -719,7 +809,14 @@ function order() {
     document.getElementById("banner").style.display = "none";
     document.getElementById("voiceNotes").style.display = "none";
     document.getElementById("info").style.display = "none";
-    document.getElementById("ordered").style.display = "flex";
+
+    if (type === "album") {
+        document.getElementById("albumOrder").style.display = "flex";
+    }
+
+    if (type === "shirt") {
+        document.getElementById("shirtOrder").style.display = "flex";
+    }
 }
 
 </script>
