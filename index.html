@@ -10,6 +10,8 @@ const SITE_STATUS = "OFF";
 
 const INFO_ITEMS = [
     "19.11🤫...",
+    "mam coś dla pierwszych 100 osób",
+    "które dodały koszulke od ulubionych"
 ];
 
 /* INFO PŁYTY */
@@ -31,9 +33,10 @@ const SHIRT_INFO_ITEMS = [
     "przykładowy tekst"
 ];
 
-/* LICZNIK ULUBIONYCH */
+/* LICZNIKI ULUBIONYCH */
 
 const FAVORITES_COUNT = 699;
+const SHIRT_FAVORITES_COUNT = 119;
 </script>
 
 <style>
@@ -255,6 +258,15 @@ body {
 .product {
     width: 300px;
     max-width: 80vw;
+    cursor: pointer;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+/* KOSZULKA */
+
+.shirt-product {
+    width: 360px;
+    max-width: 90vw;
     cursor: pointer;
     animation: pulse 2s ease-in-out infinite;
 }
@@ -544,10 +556,27 @@ body {
 
             <img
                 src="koszulka1.png"
-                class="product"
+                class="shirt-product"
                 alt="Koszulka Lost Media"
                 onclick="order('shirt')"
             >
+
+            <div class="favorite-section">
+
+                <button
+                    class="favorite-btn"
+                    id="shirtFavoriteBtn"
+                    onclick="toggleShirtFavorite()"
+                >
+                    ☆ dodaj do ulubionych
+                </button>
+
+                <div class="favorite-count">
+                    <span class="favorite-dot"></span>
+                    <span id="shirtFavoriteCount"></span>
+                </div>
+
+            </div>
 
         </div>
 
@@ -616,19 +645,22 @@ displayInfo(INFO_ITEMS, "infoList");
 displayInfo(ORDER_INFO_ITEMS, "orderInfoList");
 displayInfo(SHIRT_INFO_ITEMS, "shirtInfoList");
 
-/* LICZNIK ULUBIONYCH */
+/* LICZNIKI ULUBIONYCH */
 
 document.getElementById("favoriteCount").textContent =
     FAVORITES_COUNT + " osób dodało do ulubionych";
 
-/* ULUBIONE */
+document.getElementById("shirtFavoriteCount").textContent =
+    SHIRT_FAVORITES_COUNT + " osób dodało do ulubionych";
+
+/* ULUBIONE PŁYTY */
 
 let isFavorite = false;
 
 try {
     isFavorite = localStorage.getItem("lostMediaFavorite") === "true";
 } catch (error) {
-    console.log("Nie można odczytać ulubionych.");
+    console.log("Nie można odczytać ulubionych płyty.");
 }
 
 function updateFavoriteButton() {
@@ -649,13 +681,53 @@ function toggleFavorite() {
     try {
         localStorage.setItem("lostMediaFavorite", isFavorite);
     } catch (error) {
-        console.log("Nie można zapisać ulubionych.");
+        console.log("Nie można zapisać ulubionych płyty.");
     }
 
     updateFavoriteButton();
 }
 
 updateFavoriteButton();
+
+/* ULUBIONE KOSZULKI - OSOBNA ZMIENNA I ZAPIS */
+
+let isShirtFavorite = false;
+
+try {
+    isShirtFavorite =
+        localStorage.getItem("lostMediaShirtFavorite") === "true";
+} catch (error) {
+    console.log("Nie można odczytać ulubionych koszulki.");
+}
+
+function updateShirtFavoriteButton() {
+    const button = document.getElementById("shirtFavoriteBtn");
+
+    if (isShirtFavorite) {
+        button.textContent = "★ dodano do ulubionych";
+        button.classList.add("active");
+    } else {
+        button.textContent = "☆ dodaj do ulubionych";
+        button.classList.remove("active");
+    }
+}
+
+function toggleShirtFavorite() {
+    isShirtFavorite = !isShirtFavorite;
+
+    try {
+        localStorage.setItem(
+            "lostMediaShirtFavorite",
+            isShirtFavorite
+        );
+    } catch (error) {
+        console.log("Nie można zapisać ulubionych koszulki.");
+    }
+
+    updateShirtFavoriteButton();
+}
+
+updateShirtFavoriteButton();
 
 /* GŁOSÓWKI */
 
