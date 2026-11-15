@@ -7,7 +7,11 @@
 <title>LOST MEDIA</title>
 
 <script>
-const SITE_STATUS = "OFF";
+const SITE_STATUS = "ON";
+
+/* HASŁO DO STRONY */
+
+const MAINTENANCE_PASSWORD = "losttmedia";
 
 /* STATUS WYPRZEDANIA PRODUKTÓW */
 
@@ -88,6 +92,46 @@ body {
 
 .maintenance.active {
     display: flex;
+}
+
+.maintenance-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+#maintenancePassword {
+    background: #151515;
+    border: 1px solid #333;
+    color: white;
+    padding: 12px 15px;
+    outline: none;
+    text-align: center;
+    font-size: 13px;
+    width: 220px;
+}
+
+#maintenancePassword:focus {
+    border-color: #777;
+}
+
+.maintenance-content button {
+    background: #222;
+    border: 1px solid #444;
+    color: white;
+    padding: 10px 25px;
+    cursor: pointer;
+}
+
+.maintenance-content button:hover {
+    background: #333;
+}
+
+#passwordError {
+    color: #999;
+    font-size: 12px;
+    min-height: 14px;
 }
 
 /* BANER */
@@ -558,7 +602,20 @@ body {
 <body>
 
 <div class="maintenance" id="maintenance">
-    wróć o 19:19
+    <div class="maintenance-content">
+        <div>wróć o 19:19</div>
+
+        <input
+            type="password"
+            id="maintenancePassword"
+            placeholder="hasło..."
+            autocomplete="off"
+        >
+
+        <button onclick="unlockSite()">wejdź</button>
+
+        <div id="passwordError"></div>
+    </div>
 </div>
 
 <!-- BANER -->
@@ -805,11 +862,29 @@ body {
 
 <script>
 
-/* TRYB STRONY */
+/* TRYB STRONY + HASŁO */
 
 if (SITE_STATUS === "ON") {
     document.getElementById("maintenance").classList.add("active");
 }
+
+function unlockSite() {
+    const password = document.getElementById("maintenancePassword").value;
+    const error = document.getElementById("passwordError");
+
+    if (password === MAINTENANCE_PASSWORD) {
+        document.getElementById("maintenance").classList.remove("active");
+    } else {
+        error.textContent = "nieprawidłowe hasło";
+        document.getElementById("maintenancePassword").value = "";
+    }
+}
+
+document.getElementById("maintenancePassword").addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        unlockSite();
+    }
+});
 
 /* SYSTEM WYPRZEDANYCH PRODUKTÓW */
 
