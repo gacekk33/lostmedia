@@ -16,8 +16,6 @@ const INFO_ITEMS = [
     "yoo co jeszcze nas czeka?"
 ];
 
-/* INFO PŁYTY */
-
 const ORDER_INFO_ITEMS = [
     "jak kupisz to masz:",
     "20 utwórów",
@@ -29,8 +27,6 @@ const ORDER_INFO_ITEMS = [
     "preorder limitowany na 3333 sztuk."
 ];
 
-/* INFO KOSZULKI */
-
 const SHIRT_INFO_ITEMS = [
     "gramatura 280gsm",
     "100% baw33łna",
@@ -40,8 +36,6 @@ const SHIRT_INFO_ITEMS = [
     "limitowana na 333 sztuki"
 ];
 
-/* INFO CHAINA - NA RAZIE PRZYKŁADOWE */
-
 const CHAIN_INFO_ITEMS = [
     "wykonany z stali nierdzewnej",
     "srebrny z wykończeniami lost media",
@@ -50,8 +44,6 @@ const CHAIN_INFO_ITEMS = [
     "dostępne tylko w preorderze",
     "wyprodukowano w polsc33"
 ];
-
-/* LICZNIKI ULUBIONYCH */
 
 const FAVORITES_COUNT = 1692;
 const SHIRT_FAVORITES_COUNT = 927;
@@ -272,6 +264,24 @@ body {
     letter-spacing: 2px;
     margin-bottom: 35px;
     white-space: nowrap;
+}
+
+/* TEKST PREORDERU NAD PŁYTĄ */
+
+.preorder-date {
+    font-size: 14px;
+    color: #bdbdbd;
+    letter-spacing: 0.5px;
+    margin-bottom: 7px;
+    text-align: center;
+}
+
+.preorder-subtitle {
+    font-size: 11px;
+    color: #888;
+    letter-spacing: 0.4px;
+    margin-bottom: 22px;
+    text-align: center;
 }
 
 .product {
@@ -579,6 +589,14 @@ body {
 
         <div class="product-card">
 
+            <div class="preorder-date">
+                preorder od 19.11 do 05.12
+            </div>
+
+            <div class="preorder-subtitle">
+                lub do wyczerpania zapasów
+            </div>
+
             <h1 class="product-title">kup płyte lost media (70zł)</h1>
 
             <img
@@ -621,7 +639,6 @@ body {
             >
 
             <div class="favorite-section">
-
                 <button
                     class="favorite-btn"
                     id="shirtFavoriteBtn"
@@ -634,7 +651,6 @@ body {
                     <span class="favorite-dot"></span>
                     <span id="shirtFavoriteCount"></span>
                 </div>
-
             </div>
 
         </div>
@@ -767,7 +783,7 @@ function toggleFavorite() {
 
 updateFavoriteButton();
 
-/* ULUBIONE KOSZULKI - OSOBNA ZMIENNA I ZAPIS */
+/* ULUBIONE KOSZULKI */
 
 let isShirtFavorite = false;
 
@@ -807,7 +823,7 @@ function toggleShirtFavorite() {
 
 updateShirtFavoriteButton();
 
-/* ULUBIONE CHAINA - OSOBNA ZMIENNA I ZAPIS */
+/* ULUBIONE CHAINA */
 
 let isChainFavorite = false;
 
