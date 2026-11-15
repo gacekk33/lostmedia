@@ -11,9 +11,9 @@ const SITE_STATUS = "OFF";
 const INFO_ITEMS = [
     "19.11🤫...",
     "mam coś dla pierwszych 100 osób",
-    "które dodały koszulke od ulubionych",
+    "które dodały chaina od ulubionych",
     "19.11 za każdym ra2em full & 2 nowe snippety",
-    "19:00🤫..."
+    "yoo co jeszcze ans czeka?"
 ];
 
 /* INFO PŁYTY */
@@ -39,10 +39,21 @@ const SHIRT_INFO_ITEMS = [
     "wyprodukowano w polsc33"
 ];
 
+/* INFO CHAINA - NA RAZIE PRZYKŁADOWE */
+
+const CHAIN_INFO_ITEMS = [
+    "wykonany z stali nierdzewnej",
+    "srebrny z wykończeniami lost media",
+    "wodooporny stal",
+    "limitowane na 333 sztuki",
+    "dostępne tylko w preorderze",
+];
+
 /* LICZNIKI ULUBIONYCH */
 
 const FAVORITES_COUNT = 1692;
 const SHIRT_FAVORITES_COUNT = 927;
+const CHAIN_FAVORITES_COUNT = 0;
 </script>
 
 <style>
@@ -262,7 +273,16 @@ body {
 }
 
 .product {
-    width: 300px;
+    width: 230px;
+    max-width: 80vw;
+    cursor: pointer;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+/* CHAIN */
+
+.chain-product {
+    width: 230px;
     max-width: 80vw;
     cursor: pointer;
     animation: pulse 2s ease-in-out infinite;
@@ -271,7 +291,7 @@ body {
 /* KOSZULKA */
 
 .shirt-product {
-    width: 400px;
+    width: 300px;
     max-width: 90vw;
     cursor: pointer;
     animation: pulse 2s ease-in-out infinite;
@@ -399,6 +419,7 @@ body {
 @media (max-width: 850px) {
     .products {
         gap: 45px;
+        flex-wrap: wrap;
     }
 
     .product-card {
@@ -522,11 +543,41 @@ body {
 
     <div class="products">
 
+        <!-- CHAIN -->
+
+        <div class="product-card">
+
+            <h1 class="product-title">kup chain lost media (333zł)</h1>
+
+            <img
+                src="chain1.png"
+                class="chain-product"
+                alt="Chain Lost Media"
+                onclick="order('chain')"
+            >
+
+            <div class="favorite-section">
+                <button
+                    class="favorite-btn"
+                    id="chainFavoriteBtn"
+                    onclick="toggleChainFavorite()"
+                >
+                    ☆ dodaj do ulubionych
+                </button>
+
+                <div class="favorite-count">
+                    <span class="favorite-dot"></span>
+                    <span id="chainFavoriteCount"></span>
+                </div>
+            </div>
+
+        </div>
+
         <!-- PŁYTA -->
 
         <div class="product-card">
 
-            <h1 class="product-title">kup płyte lost media</h1>
+            <h1 class="product-title">kup płyte lost media (70zł)</h1>
 
             <img
                 src="lostmedia.png"
@@ -558,7 +609,7 @@ body {
 
         <div class="product-card">
 
-            <h1 class="product-title">kup koszulke lost media</h1>
+            <h1 class="product-title">kup koszulke lost media (133zł)</h1>
 
             <img
                 src="koszulka1.png"
@@ -601,6 +652,21 @@ body {
     <div class="order-info">
         <h3>info</h3>
         <div id="orderInfoList"></div>
+    </div>
+
+</div>
+
+<!-- EKRAN CHAINA -->
+
+<div class="ordered" id="chainOrder">
+
+    <h2>dostępne 19.11</h2>
+
+    <p>19.11 za każdym ra2em full</p>
+
+    <div class="order-info">
+        <h3>info</h3>
+        <div id="chainInfoList"></div>
     </div>
 
 </div>
@@ -650,6 +716,7 @@ function displayInfo(items, elementId) {
 displayInfo(INFO_ITEMS, "infoList");
 displayInfo(ORDER_INFO_ITEMS, "orderInfoList");
 displayInfo(SHIRT_INFO_ITEMS, "shirtInfoList");
+displayInfo(CHAIN_INFO_ITEMS, "chainInfoList");
 
 /* LICZNIKI ULUBIONYCH */
 
@@ -658,6 +725,9 @@ document.getElementById("favoriteCount").textContent =
 
 document.getElementById("shirtFavoriteCount").textContent =
     SHIRT_FAVORITES_COUNT + " osób dodało do ulubionych";
+
+document.getElementById("chainFavoriteCount").textContent =
+    CHAIN_FAVORITES_COUNT + " osób dodało do ulubionych";
 
 /* ULUBIONE PŁYTY */
 
@@ -734,6 +804,46 @@ function toggleShirtFavorite() {
 }
 
 updateShirtFavoriteButton();
+
+/* ULUBIONE CHAINA - OSOBNA ZMIENNA I ZAPIS */
+
+let isChainFavorite = false;
+
+try {
+    isChainFavorite =
+        localStorage.getItem("lostMediaChainFavorite") === "true";
+} catch (error) {
+    console.log("Nie można odczytać ulubionych chaina.");
+}
+
+function updateChainFavoriteButton() {
+    const button = document.getElementById("chainFavoriteBtn");
+
+    if (isChainFavorite) {
+        button.textContent = "★ dodano do ulubionych";
+        button.classList.add("active");
+    } else {
+        button.textContent = "☆ dodaj do ulubionych";
+        button.classList.remove("active");
+    }
+}
+
+function toggleChainFavorite() {
+    isChainFavorite = !isChainFavorite;
+
+    try {
+        localStorage.setItem(
+            "lostMediaChainFavorite",
+            isChainFavorite
+        );
+    } catch (error) {
+        console.log("Nie można zapisać ulubionych chaina.");
+    }
+
+    updateChainFavoriteButton();
+}
+
+updateChainFavoriteButton();
 
 /* GŁOSÓWKI */
 
@@ -894,6 +1004,10 @@ function order(type) {
 
     if (type === "shirt") {
         document.getElementById("shirtOrder").style.display = "flex";
+    }
+
+    if (type === "chain") {
+        document.getElementById("chainOrder").style.display = "flex";
     }
 }
 
