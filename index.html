@@ -366,6 +366,7 @@ body {
 .sold-out .shirt-product {
     animation: none !important;
     transform: scale(1) !important;
+    cursor: default;
 }
 
 @keyframes soldPulse {
@@ -1122,6 +1123,18 @@ async function playOkaySound() {
 /* OTWIERANIE PRODUKTÓW */
 
 function order(type) {
+
+    /* BLOKADA WYPRZEDANYCH PRODUKTÓW */
+
+    const soldOutProducts = {
+        chain: X_chain,
+        album: X_plyta,
+        shirt: X_koszulka
+    };
+
+    if (soldOutProducts[type] === "on") {
+        return;
+    }
 
     audios.forEach((audio, id) => {
         resetVoice(id);
