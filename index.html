@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -7,6 +8,12 @@
 
 <script>
 const SITE_STATUS = "OFF";
+
+/* STATUS WYPRZEDANIA PRODUKTÓW */
+
+const X_chain = "off";
+const X_plyta = "off";
+const X_koszulka = "off";
 
 const INFO_ITEMS = [
     "19.11🤫...",
@@ -40,7 +47,7 @@ const CHAIN_INFO_ITEMS = [
     "wykonany z stali nierdzewnej",
     "srebrny z wykończeniami lost media",
     "wodooporny stal",
-    "limitowane na 333 sztuki",
+    "limitowane na 33 sztuki",
     "dostępne tylko w preorderze",
     "wyprodukowano w polsc33"
 ];
@@ -284,6 +291,8 @@ body {
     text-align: center;
 }
 
+/* ZDJĘCIA PRODUKTÓW */
+
 .product {
     width: 190px;
     max-width: 80vw;
@@ -312,6 +321,61 @@ body {
 @keyframes pulse {
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.1); }
+}
+
+/* SYSTEM WYPRZEDANYCH */
+
+.sold-label {
+    display: none;
+    color: #bdbdbd;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.sold-out .sold-label {
+    display: block;
+}
+
+.product-image-wrap {
+    position: relative;
+    display: inline-block;
+    line-height: 0;
+}
+
+.sold-overlay {
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+.sold-out .sold-overlay {
+    display: block;
+    animation: soldPulse 2s ease-in-out infinite;
+}
+
+.sold-out .product,
+.sold-out .chain-product,
+.sold-out .shirt-product {
+    animation: none !important;
+    transform: scale(1) !important;
+}
+
+@keyframes soldPulse {
+    0%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    50% {
+        transform: translate(-50%, -50%) scale(1.15);
+    }
 }
 
 /* ULUBIONE */
@@ -557,16 +621,26 @@ body {
 
         <!-- CHAIN -->
 
-        <div class="product-card">
+        <div class="product-card" id="chainCard">
+
+            <div class="sold-label">wyprzedane</div>
 
             <h1 class="product-title">kup chain lost media (333zł)</h1>
 
-            <img
-                src="chain1.png"
-                class="chain-product"
-                alt="Chain Lost Media"
-                onclick="order('chain')"
-            >
+            <div class="product-image-wrap">
+                <img
+                    src="chain1.png"
+                    class="chain-product"
+                    alt="Chain Lost Media"
+                    onclick="order('chain')"
+                >
+
+                <img
+                    src="wyprzedane.png"
+                    class="sold-overlay"
+                    alt=""
+                >
+            </div>
 
             <div class="favorite-section">
                 <button
@@ -587,7 +661,7 @@ body {
 
         <!-- PŁYTA -->
 
-        <div class="product-card">
+        <div class="product-card" id="albumCard">
 
             <div class="preorder-date">
                 preorder od 19.11 do 05.12
@@ -597,14 +671,24 @@ body {
                 lub do wyczerpania zapasów
             </div>
 
+            <div class="sold-label">wyprzedane</div>
+
             <h1 class="product-title">kup płyte lost media (70zł)</h1>
 
-            <img
-                src="lostmedia.png"
-                class="product"
-                alt="Lost Media"
-                onclick="order('album')"
-            >
+            <div class="product-image-wrap">
+                <img
+                    src="lostmedia.png"
+                    class="product"
+                    alt="Lost Media"
+                    onclick="order('album')"
+                >
+
+                <img
+                    src="wyprzedane.png"
+                    class="sold-overlay"
+                    alt=""
+                >
+            </div>
 
             <div class="favorite-section">
 
@@ -627,16 +711,26 @@ body {
 
         <!-- KOSZULKA -->
 
-        <div class="product-card">
+        <div class="product-card" id="shirtCard">
+
+            <div class="sold-label">wyprzedane</div>
 
             <h1 class="product-title">kup koszulke lost media (133zł)</h1>
 
-            <img
-                src="koszulka1.png"
-                class="shirt-product"
-                alt="Koszulka Lost Media"
-                onclick="order('shirt')"
-            >
+            <div class="product-image-wrap">
+                <img
+                    src="koszulka1.png"
+                    class="shirt-product"
+                    alt="Koszulka Lost Media"
+                    onclick="order('shirt')"
+                >
+
+                <img
+                    src="wyprzedane.png"
+                    class="sold-overlay"
+                    alt=""
+                >
+            </div>
 
             <div class="favorite-section">
                 <button
@@ -715,6 +809,30 @@ body {
 if (SITE_STATUS === "ON") {
     document.getElementById("maintenance").classList.add("active");
 }
+
+/* SYSTEM WYPRZEDANYCH PRODUKTÓW */
+
+function setSoldOut(type, status) {
+    const cards = {
+        chain: "chainCard",
+        album: "albumCard",
+        shirt: "shirtCard"
+    };
+
+    const selectedCard = document.getElementById(cards[type]);
+
+    if (!selectedCard) return;
+
+    if (status === "on") {
+        selectedCard.classList.add("sold-out");
+    } else {
+        selectedCard.classList.remove("sold-out");
+    }
+}
+
+setSoldOut("chain", X_chain);
+setSoldOut("album", X_plyta);
+setSoldOut("shirt", X_koszulka);
 
 /* FUNKCJA WYŚWIETLANIA INFO */
 
