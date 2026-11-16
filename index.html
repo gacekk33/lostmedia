@@ -264,8 +264,7 @@ body {
     width: 270px;
 }
 
-.info h1,
-.order-info h3 {
+.info h1 {
     font-size: 25px;
     font-weight: normal;
     text-transform: lowercase;
@@ -501,63 +500,6 @@ body {
 @keyframes greenDot {
     from { background: #174d29; }
     to { background: #65d982; }
-}
-
-/* EKRANY PRODUKTÓW */
-
-.ordered {
-    display: none;
-    position: fixed;
-    inset: 0;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    background: #080808;
-    text-align: center;
-    animation: appear 1s ease;
-    z-index: 20;
-    overflow-y: auto;
-    padding: 40px 20px;
-}
-
-.ordered h2 {
-    font-size: 30px;
-    letter-spacing: 3px;
-    font-weight: normal;
-    margin-bottom: 15px;
-}
-
-.ordered p {
-    color: #999;
-    font-size: 15px;
-    letter-spacing: 1px;
-}
-
-.order-info {
-    margin-top: 45px;
-    width: 100%;
-    max-width: 350px;
-    text-align: left;
-}
-
-.order-info h3 {
-    text-align: left;
-    margin-bottom: 25px;
-}
-
-.order-info .info-item {
-    margin-bottom: 18px;
-}
-
-@keyframes appear {
-    from {
-        opacity: 0;
-        transform: scale(0.9);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
 }
 
 /* TELEFONY */
@@ -850,55 +792,6 @@ body {
 
 </div>
 
-<!-- EKRAN PŁYTY -->
-
-<div class="ordered" id="albumOrder">
-
-    <h2>dostępne 19.11</h2>
-
-    <p>19.11 za każdym ra2em full</p>
-
-    <div class="order-info">
-        <h3>info</h3>
-        <div id="orderInfoList"></div>
-    </div>
-
-</div>
-
-<!-- EKRAN CHAINA -->
-
-<div class="ordered" id="chainOrder">
-
-    <h2>dostępne 19.11</h2>
-
-    <p>19.11 za każdym ra2em full</p>
-
-    <div class="order-info">
-        <h3>info</h3>
-        <div id="chainInfoList"></div>
-    </div>
-
-</div>
-
-<!-- EKRAN KOSZULKI -->
-
-<div class="ordered" id="shirtOrder">
-
-    <h2>dostępne 19.11</h2>
-
-    <p>19.11 za każdym ra2em full</p>
-
-    <div class="order-info">
-        <h3>info</h3>
-        <div id="shirtInfoList"></div>
-    </div>
-
-</div>
-
-<!-- DŹWIĘK -->
-
-<audio id="okaySound" src="okay.mp3" preload="auto"></audio>
-
 <script>
 
 /* TRYB STRONY + HASŁO */
@@ -996,9 +889,6 @@ function displayInfo(items, elementId) {
 /* INFO */
 
 displayInfo(INFO_ITEMS, "infoList");
-displayInfo(ORDER_INFO_ITEMS, "orderInfoList");
-displayInfo(SHIRT_INFO_ITEMS, "shirtInfoList");
-displayInfo(CHAIN_INFO_ITEMS, "chainInfoList");
 
 /* LICZNIKI ULUBIONYCH */
 
@@ -1213,59 +1103,7 @@ audios.forEach((audio, id) => {
     });
 });
 
-/* DŹWIĘK OKAY.MP3 - WZMOCNIENIE 115% */
-
-let okayAudioContext = null;
-let okayGainNode = null;
-let okaySourceNode = null;
-
-async function playOkaySound() {
-    const sound = document.getElementById("okaySound");
-
-    try {
-        if (!okayAudioContext) {
-            const AudioContextClass =
-                window.AudioContext || window.webkitAudioContext;
-
-            if (!AudioContextClass) {
-                throw new Error("Web Audio API nie jest obsługiwane.");
-            }
-
-            okayAudioContext = new AudioContextClass();
-
-            okaySourceNode =
-                okayAudioContext.createMediaElementSource(sound);
-
-            okayGainNode = okayAudioContext.createGain();
-
-            okayGainNode.gain.value = 1.15;
-
-            okaySourceNode.connect(okayGainNode);
-            okayGainNode.connect(okayAudioContext.destination);
-        }
-
-        if (okayAudioContext.state === "suspended") {
-            await okayAudioContext.resume();
-        }
-
-        sound.pause();
-        sound.currentTime = 0;
-
-        await sound.play();
-
-    } catch (error) {
-        console.log("Błąd odtwarzania okay.mp3:", error);
-
-        sound.volume = 1;
-        sound.currentTime = 0;
-
-        sound.play().catch(fallbackError => {
-            console.log("Nie udało się odtworzyć dźwięku:", fallbackError);
-        });
-    }
-}
-
-/* OTWIERANIE PRODUKTÓW */
+/* OTWIERANIE OSOBNYCH STRON PRODUKTÓW */
 
 function order(type) {
 
@@ -1281,28 +1119,21 @@ function order(type) {
         return;
     }
 
-    audios.forEach((audio, id) => {
-        resetVoice(id);
-    });
+    /* ADRESY PODSTRON */
 
-    playOkaySound();
+    const productPages = {
+        chain: "chain.html",
+        album: "plyta.html",
+        shirt: "koszulka.html"
+    };
 
-    document.getElementById("main").style.display = "none";
-    document.getElementById("banner").style.display = "none";
-    document.getElementById("voiceNotes").style.display = "none";
-    document.getElementById("info").style.display = "none";
+    const destination = productPages[type];
 
-    if (type === "album") {
-        document.getElementById("albumOrder").style.display = "flex";
+    if (!destination) {
+        return;
     }
 
-    if (type === "shirt") {
-        document.getElementById("shirtOrder").style.display = "flex";
-    }
-
-    if (type === "chain") {
-        document.getElementById("chainOrder").style.display = "flex";
-    }
+    window.location.href = destination;
 }
 
 </script>
