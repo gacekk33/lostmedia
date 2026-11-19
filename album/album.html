@@ -1,0 +1,378 @@
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LOST MEDIA — ALBUM</title>
+
+<script>
+const SITE_STATUS = "OFF";
+const MAINTENANCE_PASSWORD = "losttmedia";
+
+/* INFORMACJE O ALBUMIE */
+
+const ORDER_INFO_ITEMS = [
+    "jak kupisz to masz:",
+    "20 utwórów",
+    "limitowane opakowanie preorderowe.",
+    "płyta dostępa *tylko* w preorderze.",
+    "płyta w formie rzeczywistej oraz cyfrowej",
+    "możliwość wcześniejszego posłuchania płyty.",
+    "data premiery na yt.",
+    "preorder limitowany na 3333 sztuk."
+];
+
+const PREORDER_DATE = new Date("2026-11-19T20:00:00+01:00");
+</script>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #080808;
+    color: white;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+}
+
+/* EKRAN HASŁA */
+
+.maintenance {
+    position: fixed;
+    inset: 0;
+    background: #080808;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 99999;
+    color: white;
+    font-size: 22px;
+    letter-spacing: 1px;
+}
+
+.maintenance.active {
+    display: flex;
+}
+
+.maintenance-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+#maintenancePassword {
+    background: #151515;
+    border: 1px solid #333;
+    color: white;
+    padding: 12px 15px;
+    outline: none;
+    text-align: center;
+    font-size: 13px;
+    width: 220px;
+}
+
+#maintenancePassword:focus {
+    border-color: #777;
+}
+
+.maintenance-content button {
+    background: #222;
+    border: 1px solid #444;
+    color: white;
+    padding: 10px 25px;
+    cursor: pointer;
+}
+
+.maintenance-content button:hover {
+    background: #333;
+}
+
+#passwordError {
+    color: #999;
+    font-size: 12px;
+    min-height: 14px;
+}
+
+/* STRONA ALBUMU */
+
+.page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 50px 20px;
+    animation: appear 1s ease;
+}
+
+.product-title {
+    font-size: 30px;
+    font-weight: normal;
+    letter-spacing: 4px;
+    margin-bottom: 18px;
+    text-transform: lowercase;
+}
+
+.availability {
+    color: #bdbdbd;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+}
+
+.subtitle {
+    color: #999;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    margin-bottom: 35px;
+}
+
+.timer-label {
+    color: #777;
+    font-size: 11px;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+}
+
+.preorder-timer {
+    color: #eee;
+    font-size: 22px;
+    letter-spacing: 2px;
+    font-variant-numeric: tabular-nums;
+    margin-bottom: 45px;
+}
+
+.product-image {
+    width: 230px;
+    max-width: 75vw;
+    height: auto;
+    object-fit: contain;
+    margin-bottom: 45px;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.order-info {
+    width: 100%;
+    max-width: 350px;
+    text-align: left;
+}
+
+.order-info h2 {
+    font-size: 25px;
+    font-weight: normal;
+    text-transform: lowercase;
+    letter-spacing: 2px;
+    margin-bottom: 30px;
+}
+
+.info-item {
+    color: #bdbdbd;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    margin-bottom: 18px;
+}
+
+.back-button {
+    margin-top: 50px;
+    background: #202020;
+    border: 1px solid #383838;
+    color: #eee;
+    padding: 12px 22px;
+    border-radius: 8px;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.back-button:hover {
+    background: #2b2b2b;
+    border-color: #555;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.08);
+    }
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* TELEFONY */
+
+@media (max-width: 600px) {
+    .product-title {
+        font-size: 25px;
+    }
+
+    .preorder-timer {
+        font-size: 18px;
+    }
+
+    .product-image {
+        width: 200px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- EKRAN HASŁA -->
+
+<div class="maintenance" id="maintenance">
+    <div class="maintenance-content">
+        <div>wróć o 23:23</div>
+
+        <input
+            type="password"
+            id="maintenancePassword"
+            placeholder="hasło..."
+            autocomplete="off"
+        >
+
+        <button onclick="unlockSite()">wejdź</button>
+
+        <div id="passwordError"></div>
+    </div>
+</div>
+
+<!-- STRONA ALBUMU -->
+
+<main class="page">
+
+    <div class="availability">
+        dostępne 19.11
+    </div>
+
+    <h1 class="product-title">
+        lost media
+    </h1>
+
+    <p class="subtitle">
+        19.11 za każdym ra2em full
+    </p>
+
+    <div class="timer-label">
+        preorder rozpoczyna się za
+    </div>
+
+    <div class="preorder-timer" id="preorderTimer">
+        00:00:00:00
+    </div>
+
+    <img
+        src="lostmedia.png"
+        class="product-image"
+        alt="Album LOST MEDIA"
+    >
+
+    <div class="order-info">
+        <h2>info</h2>
+        <div id="orderInfoList"></div>
+    </div>
+
+    <a href="index.html" class="back-button">
+        ← wróć na stronę główną
+    </a>
+
+</main>
+
+<script>
+
+/* TRYB STRONY + HASŁO */
+
+if (SITE_STATUS === "ON") {
+    document.getElementById("maintenance").classList.add("active");
+}
+
+function unlockSite() {
+    const password = document.getElementById("maintenancePassword").value;
+    const error = document.getElementById("passwordError");
+
+    if (password === MAINTENANCE_PASSWORD) {
+        document.getElementById("maintenance").classList.remove("active");
+    } else {
+        error.textContent = "nieprawidłowe hasło";
+        document.getElementById("maintenancePassword").value = "";
+    }
+}
+
+document.getElementById("maintenancePassword").addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        unlockSite();
+    }
+});
+
+/* TIMER PREORDERU */
+
+function updatePreorderTimer() {
+    const timer = document.getElementById("preorderTimer");
+    const now = new Date();
+    const difference = PREORDER_DATE.getTime() - now.getTime();
+
+    if (difference <= 0) {
+        timer.textContent = "PREORDER ROZPOCZĘTY";
+        timer.style.fontSize = "13px";
+        timer.style.letterSpacing = "1px";
+        return;
+    }
+
+    const totalSeconds = Math.floor(difference / 1000);
+
+    const days = Math.floor(totalSeconds / 86400);
+    const hours = Math.floor((totalSeconds % 86400) / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    timer.textContent =
+        String(days).padStart(2, "0") + ":" +
+        String(hours).padStart(2, "0") + ":" +
+        String(minutes).padStart(2, "0") + ":" +
+        String(seconds).padStart(2, "0");
+}
+
+updatePreorderTimer();
+setInterval(updatePreorderTimer, 1000);
+
+/* INFORMACJE O ALBUMIE */
+
+function displayInfo(items, elementId) {
+    const list = document.getElementById(elementId);
+
+    items.forEach(text => {
+        const item = document.createElement("div");
+        item.className = "info-item";
+        item.textContent = text;
+        list.appendChild(item);
+    });
+}
+
+displayInfo(ORDER_INFO_ITEMS, "orderInfoList");
+
+</script>
+
+</body>
+</html>
