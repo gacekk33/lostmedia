@@ -147,15 +147,6 @@ body {
     margin-bottom: 45px;
 }
 
-.product-image {
-    width: 230px;
-    max-width: 75vw;
-    height: auto;
-    object-fit: contain;
-    margin-bottom: 45px;
-    animation: pulse 2s ease-in-out infinite;
-}
-
 .order-info {
     width: 100%;
     max-width: 350px;
@@ -196,16 +187,6 @@ body {
     border-color: #555;
 }
 
-@keyframes pulse {
-    0%, 100% {
-        transform: scale(1);
-    }
-
-    50% {
-        transform: scale(1.08);
-    }
-}
-
 @keyframes appear {
     from {
         opacity: 0;
@@ -227,10 +208,6 @@ body {
 
     .preorder-timer {
         font-size: 18px;
-    }
-
-    .product-image {
-        width: 200px;
     }
 }
 </style>
@@ -280,12 +257,6 @@ body {
     <div class="preorder-timer" id="preorderTimer">
         00:00:00:00
     </div>
-
-    <img
-        src="chain1.png"
-        class="product-image"
-        alt="LOST MEDIA Chain"
-    >
 
     <div class="order-info">
         <h2>info</h2>
