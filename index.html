@@ -6,12 +6,9 @@
 <title>LOST MEDIA</title>
 
 <script>
-const SITE_STATUS = "OFF";
-
-/* HASŁO DO STRONY */
+const SITE_STATUS = "ON";
 const MAINTENANCE_PASSWORD = "losttmedia";
 
-/* STATUS WYPRZEDANIA PRODUKTÓW */
 const X_chain = "off";
 const X_plyta = "off";
 const X_koszulka = "off";
@@ -321,7 +318,7 @@ body {
     white-space: nowrap;
 }
 
-/* MIEJSCE NA INFORMACJE O PREORDERZE — WYRÓWNUJE TYTUŁY PRODUKTÓW */
+/* MIEJSCE NA INFORMACJE O PREORDERZE */
 
 .preorder-area {
     height: 125px;
@@ -337,8 +334,6 @@ body {
     width: 100%;
     flex-shrink: 0;
 }
-
-/* TEKST PREORDERU NAD PŁYTĄ */
 
 .preorder-date {
     font-size: 14px;
@@ -389,16 +384,12 @@ body {
     animation: pulse 2s ease-in-out infinite;
 }
 
-/* CHAIN */
-
 .chain-product {
     width: 180px;
     max-width: 80vw;
     cursor: pointer;
     animation: pulse 2s ease-in-out infinite;
 }
-
-/* KOSZULKA */
 
 .shirt-product {
     width: 245px;
@@ -614,7 +605,7 @@ body {
 
 <div class="maintenance" id="maintenance">
     <div class="maintenance-content">
-        <div>wróć o 23:23</div>
+        <div>wróć o 18:33</div>
 
         <input
             type="password"
@@ -641,31 +632,49 @@ body {
 
     <div class="voice-group">
         <div class="voice-label">red alabaster full</div>
-
         <div class="voice-note">
             <button class="play-btn" onclick="toggleVoice(0)">▶</button>
-
             <div class="voice-content">
                 <div class="waveform" id="wave0"></div>
                 <span class="voice-time" id="time0">00:00</span>
             </div>
-
-            <audio id="audio0" src="redalabaster.mp3" preload="metadata"></audio>
+            <audio class="voice-audio" id="audio0" src="redalabaster.mp3" preload="metadata"></audio>
         </div>
     </div>
 
     <div class="voice-group">
-        <div class="voice-label">za każdym ra2em rozszerzony snippet</div>
-
+        <div class="voice-label">za każdym ra2em full</div>
         <div class="voice-note">
             <button class="play-btn" onclick="toggleVoice(1)">▶</button>
-
             <div class="voice-content">
                 <div class="waveform" id="wave1"></div>
                 <span class="voice-time" id="time1">00:00</span>
             </div>
+            <audio class="voice-audio" id="audio1" src="zakazdymra2em.mp3" preload="metadata"></audio>
+        </div>
+    </div>
 
-            <audio id="audio1" src="snippet2.mp3" preload="metadata"></audio>
+    <div class="voice-group">
+        <div class="voice-label">terapia</div>
+        <div class="voice-note">
+            <button class="play-btn" onclick="toggleVoice(2)">▶</button>
+            <div class="voice-content">
+                <div class="waveform" id="wave2"></div>
+                <span class="voice-time" id="time2">00:00</span>
+            </div>
+            <audio class="voice-audio" id="audio2" src="terapia.lostmedia.mp3" preload="metadata"></audio>
+        </div>
+    </div>
+
+    <div class="voice-group">
+        <div class="voice-label">terapia 2</div>
+        <div class="voice-note">
+            <button class="play-btn" onclick="toggleVoice(3)">▶</button>
+            <div class="voice-content">
+                <div class="waveform" id="wave3"></div>
+                <span class="voice-time" id="time3">00:00</span>
+            </div>
+            <audio class="voice-audio" id="audio3" src="terapia2.lostmedia.mp3" preload="metadata"></audio>
         </div>
     </div>
 
@@ -685,15 +694,12 @@ body {
 <!-- PRODUKTY -->
 
 <div class="main" id="main">
-
     <div class="products">
 
         <!-- CHAIN -->
 
         <div class="product-card" id="chainCard">
-
             <div class="preorder-placeholder"></div>
-
             <div class="sold-label">wyprzedane</div>
 
             <h1 class="product-title">kup chain lost media (333zł)</h1>
@@ -729,13 +735,11 @@ body {
                     <span id="chainFavoriteCount"></span>
                 </div>
             </div>
-
         </div>
 
         <!-- PŁYTA -->
 
         <div class="product-card" id="albumCard">
-
             <div class="preorder-area">
                 <div class="preorder-date">
                     preorder od 19.11 do 05.12
@@ -774,7 +778,6 @@ body {
             </div>
 
             <div class="favorite-section">
-
                 <button
                     class="favorite-btn"
                     id="favoriteBtn"
@@ -789,17 +792,13 @@ body {
                     <span class="favorite-dot"></span>
                     <span id="favoriteCount"></span>
                 </div>
-
             </div>
-
         </div>
 
         <!-- KOSZULKA -->
 
         <div class="product-card" id="shirtCard">
-
             <div class="preorder-placeholder"></div>
-
             <div class="sold-label">wyprzedane</div>
 
             <h1 class="product-title">kup koszulke lost media (133zł)</h1>
@@ -835,11 +834,9 @@ body {
                     <span id="shirtFavoriteCount"></span>
                 </div>
             </div>
-
         </div>
 
     </div>
-
 </div>
 
 <script>
@@ -936,11 +933,9 @@ function displayInfo(items, elementId) {
     });
 }
 
-/* INFO */
-
 displayInfo(INFO_ITEMS, "infoList");
 
-/* POZOSTALA LICZBA SZTUK */
+/* POZOSTAŁA LICZBA SZTUK */
 
 document.getElementById("chainRemaining").textContent =
     "zostało " + CHAIN_REMAINING + " sztuk";
@@ -1025,10 +1020,7 @@ function toggleShirtFavorite() {
     isShirtFavorite = !isShirtFavorite;
 
     try {
-        localStorage.setItem(
-            "lostMediaShirtFavorite",
-            isShirtFavorite
-        );
+        localStorage.setItem("lostMediaShirtFavorite", isShirtFavorite);
     } catch (error) {
         console.log("Nie można zapisać ulubionych koszulki.");
     }
@@ -1065,10 +1057,7 @@ function toggleChainFavorite() {
     isChainFavorite = !isChainFavorite;
 
     try {
-        localStorage.setItem(
-            "lostMediaChainFavorite",
-            isChainFavorite
-        );
+        localStorage.setItem("lostMediaChainFavorite", isChainFavorite);
     } catch (error) {
         console.log("Nie można zapisać ulubionych chaina.");
     }
@@ -1080,10 +1069,7 @@ updateChainFavoriteButton();
 
 /* GŁOSÓWKI */
 
-const audios = [
-    document.getElementById("audio0"),
-    document.getElementById("audio1")
-];
+const audios = Array.from(document.querySelectorAll(".voice-audio"));
 
 /* TWORZENIE FALI */
 
@@ -1099,8 +1085,7 @@ function createWave(id) {
     }
 }
 
-createWave(0);
-createWave(1);
+audios.forEach((audio, id) => createWave(id));
 
 /* RESET GŁOSÓWEK */
 
@@ -1129,19 +1114,13 @@ function toggleVoice(id) {
         return;
     }
 
-    audios.forEach((other, i) => {
-        resetVoice(i);
-    });
+    audios.forEach((other, i) => resetVoice(i));
 
     audio.currentTime = 0;
 
     audio.play().then(() => {
-        document.querySelectorAll(".play-btn")[id]
-            .textContent = "Ⅱ";
-
-        document.getElementById("wave" + id)
-            .classList.add("playing");
-
+        document.querySelectorAll(".play-btn")[id].textContent = "Ⅱ";
+        document.getElementById("wave" + id).classList.add("playing");
     }).catch(error => {
         console.log("Błąd odtwarzania:", error);
     });
@@ -1159,17 +1138,12 @@ audios.forEach((audio, id) => {
             String(seconds).padStart(2, "0");
     });
 
-    audio.addEventListener("ended", () => {
-        resetVoice(id);
-    });
+    audio.addEventListener("ended", () => resetVoice(id));
 });
 
 /* OTWIERANIE OSOBNYCH STRON PRODUKTÓW */
 
 function order(type) {
-
-    /* BLOKADA WYPRZEDANYCH PRODUKTÓW */
-
     const soldOutProducts = {
         chain: X_chain,
         album: X_plyta,
@@ -1180,13 +1154,11 @@ function order(type) {
         return;
     }
 
-    /* ADRESY PODSTRON */
-
     const productPages = {
-        chain: "chain.html",
-        album: "album.html",
-        shirt: "koszulka.html"
-    };
+    chain: "chain.html",
+    album: "album.html",
+    shirt: "koszulka.html"
+};
 
     const destination = productPages[type];
 
