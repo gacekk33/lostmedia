@@ -13,6 +13,23 @@ const X_chain = "off";
 const X_plyta = "off";
 const X_koszulka = "off";
 
+/* SYSTEM REKLAM — ZMIENNE ON/OFF I KONFIGURACJA */
+const ADS_ENABLED = "on"; // globalne ON/OFF
+
+const CHAIN_AD_ENABLED = "on";
+const ALBUM_AD_ENABLED = "on";
+const SHIRT_AD_ENABLED = "on";
+
+const CHAIN_AD_IMAGE = ""; // np. "reklama-chain.png"
+const ALBUM_AD_IMAGE = ""; // np. "reklama-album.png"
+const SHIRT_AD_IMAGE = ""; // np. "reklama-koszulka.png"
+
+const CHAIN_AD_URL = ""; // adres strony reklamodawcy
+const ALBUM_AD_URL = "";
+const SHIRT_AD_URL = "";
+
+const AD_SKIP_DELAY = 5; // sekundy do aktywacji X
+
 const INFO_ITEMS = [
     "11.12",
     "to jeszcze nie koniec🤫.. (11.12)",
@@ -597,6 +614,108 @@ body {
         letter-spacing: 1px;
     }
 }
+
+/* SYSTEM REKLAM — OKNO NA ŚRODKU EKRANU */
+
+.ad-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 99990;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.82);
+}
+
+.ad-overlay.active {
+    display: flex;
+}
+
+.ad-modal {
+    position: relative;
+    width: min(50vw, 720px);
+    max-height: 75vh;
+    padding: 18px;
+    background: #111;
+    border: 1px solid #383838;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: 0 20px 70px rgba(0, 0, 0, 0.6);
+}
+
+.ad-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    color: #999;
+    font-size: 11px;
+    letter-spacing: 1px;
+}
+
+.ad-close {
+    min-width: 34px;
+    height: 34px;
+    border: 1px solid #444;
+    border-radius: 7px;
+    background: #222;
+    color: #fff;
+    font-size: 17px;
+    cursor: not-allowed;
+    opacity: 0.45;
+}
+
+.ad-close.ready {
+    cursor: pointer;
+    opacity: 1;
+}
+
+.ad-close.ready:hover {
+    background: #333;
+}
+
+.ad-image-link {
+    display: block;
+    width: 100%;
+    line-height: 0;
+    cursor: pointer;
+}
+
+.ad-image {
+    display: block;
+    width: 100%;
+    max-height: calc(75vh - 100px);
+    object-fit: contain;
+    border-radius: 5px;
+}
+
+.ad-image-link.disabled {
+    cursor: default;
+    pointer-events: none;
+}
+
+.ad-countdown {
+    min-height: 14px;
+    color: #888;
+    font-size: 11px;
+    text-align: center;
+}
+
+@media (max-width: 700px) {
+    .ad-modal {
+        width: 90vw;
+        max-height: 75vh;
+        padding: 13px;
+    }
+
+    .ad-image {
+        max-height: calc(75vh - 95px);
+    }
+}
+
 </style>
 </head>
 
@@ -1140,7 +1259,125 @@ audios.forEach((audio, id) => {
     audio.addEventListener("ended", () => resetVoice(id));
 });
 
-/* OTWIERANIE OSOBNYCH STRON PRODUKTÓW */
+/* OTWIERANIE STRON PRODUKTÓW + REKLAMY PRZED PRZEJŚCIEM */
+
+const productPages = {
+    chain: "/chain/",
+    album: "/album/",
+    shirt: "/koszulka/"
+};
+
+const productAds = {
+    chain: {
+        enabled: CHAIN_AD_ENABLED,
+        image: CHAIN_AD_IMAGE,
+        url: CHAIN_AD_URL
+    },
+    album: {
+        enabled: ALBUM_AD_ENABLED,
+        image: ALBUM_AD_IMAGE,
+        url: ALBUM_AD_URL
+    },
+    shirt: {
+        enabled: SHIRT_AD_ENABLED,
+        image: SHIRT_AD_IMAGE,
+        url: SHIRT_AD_URL
+    }
+};
+
+let pendingProductDestination = "";
+let adCountdownInterval = null;
+let adCountdownTimeout = null;
+
+function clearAdCountdown() {
+    if (adCountdownInterval) {
+        clearInterval(adCountdownInterval);
+        adCountdownInterval = null;
+    }
+
+    if (adCountdownTimeout) {
+        clearTimeout(adCountdownTimeout);
+        adCountdownTimeout = null;
+    }
+}
+
+function goToPendingProduct() {
+    clearAdCountdown();
+
+    const overlay = document.getElementById("adOverlay");
+    overlay.classList.remove("active");
+    overlay.setAttribute("aria-hidden", "true");
+
+    if (pendingProductDestination) {
+        window.location.href = pendingProductDestination;
+    }
+}
+
+function openProductAd(type) {
+    const ad = productAds[type];
+    const image = document.getElementById("adImage");
+    const imageLink = document.getElementById("adImageLink");
+    const closeButton = document.getElementById("adCloseButton");
+    const countdown = document.getElementById("adCountdown");
+    const overlay = document.getElementById("adOverlay");
+
+    if (!ad || !ad.image) {
+        window.location.href = pendingProductDestination;
+        return;
+    }
+
+    clearAdCountdown();
+
+    image.src = ad.image;
+    imageLink.href = ad.url || "#";
+    imageLink.classList.toggle("disabled", !ad.url);
+    imageLink.onclick = function(event) {
+        if (!ad.url) {
+            event.preventDefault();
+            return;
+        }
+
+        // Kliknięcie grafiki reklamy prowadzi do ustawionego adresu.
+        event.preventDefault();
+        window.location.href = ad.url;
+    };
+
+    closeButton.disabled = true;
+    closeButton.classList.remove("ready");
+    closeButton.textContent = "×";
+
+    let secondsLeft = Math.max(0, Number(AD_SKIP_DELAY) || 0);
+    countdown.textContent = "możliwość pominięcia za " + secondsLeft + " s";
+
+    overlay.classList.add("active");
+    overlay.setAttribute("aria-hidden", "false");
+
+    if (secondsLeft === 0) {
+        closeButton.disabled = false;
+        closeButton.classList.add("ready");
+        countdown.textContent = "możesz pominąć reklamę";
+        return;
+    }
+
+    adCountdownInterval = setInterval(function() {
+        secondsLeft--;
+
+        if (secondsLeft > 0) {
+            countdown.textContent = "możliwość pominięcia za " + secondsLeft + " s";
+        } else {
+            clearAdCountdown();
+            closeButton.disabled = false;
+            closeButton.classList.add("ready");
+            countdown.textContent = "możesz pominąć reklamę";
+        }
+    }, 1000);
+}
+
+document.getElementById("adCloseButton").addEventListener("click", function() {
+    if (!this.disabled) {
+        goToPendingProduct();
+    }
+});
 
 function order(type) {
     const soldOutProducts = {
@@ -1153,22 +1390,46 @@ function order(type) {
         return;
     }
 
-    const productPages = {
-    chain: "/chain/",
-    album: "/album/",
-    shirt: "/koszulka/"
-};
-
     const destination = productPages[type];
 
     if (!destination) {
         return;
     }
 
-    window.location.href = destination;
+    pendingProductDestination = destination;
+
+    const ad = productAds[type];
+    const shouldShowAd =
+        ADS_ENABLED === "on" &&
+        ad &&
+        ad.enabled === "on" &&
+        Boolean(ad.image);
+
+    if (shouldShowAd) {
+        openProductAd(type);
+    } else {
+        window.location.href = destination;
+    }
 }
 
 </script>
+
+<!-- OKNO REKLAMOWE -->
+<div class="ad-overlay" id="adOverlay" aria-hidden="true">
+    <div class="ad-modal" role="dialog" aria-modal="true" aria-label="Reklama">
+        <div class="ad-topbar">
+            <span>REKLAMA</span>
+            <button class="ad-close" id="adCloseButton" type="button" disabled
+                aria-label="Zamknij reklamę">×</button>
+        </div>
+
+        <a class="ad-image-link" id="adImageLink" href="#" aria-label="Otwórz reklamę">
+            <img class="ad-image" id="adImage" src="" alt="Grafika reklamowa">
+        </a>
+
+        <div class="ad-countdown" id="adCountdown">możliwość pominięcia za 5 s</div>
+    </div>
+</div>
 
 </body>
 </html>
