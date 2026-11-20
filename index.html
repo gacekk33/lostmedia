@@ -1286,31 +1286,109 @@ const productAds = {
 };
 
 let pendingProductDestination = "";
-let adCountdownInterval = null;
 let adCountdownTimeout = null;
+let adCountdownInterval = null;
+let adSkipAt = 0;
 
 function clearAdCountdown() {
-    if (adCountdownInterval) {
-        clearInterval(adCountdownInterval);
-        adCountdownInterval = null;
-    }
-
-    if (adCountdownTimeout) {
+    if (adCountdownTimeout !== null) {
         clearTimeout(adCountdownTimeout);
         adCountdownTimeout = null;
     }
+
+    if (adCountdownInterval !== null) {
+        clearInterval(adCountdownInterval);
+        adCountdownInterval = null;
+    }
+}
+
+function normalizeAdUrl(value) {
+    const raw = String(value || "").trim();
+
+    if (!raw) return "";
+
+    if (/^(https?:)?\/\//i.test(raw)) {
+        return raw.startsWith("//") ? window.location.protocol + raw : raw;
+    }
+
+    return "https://" + raw;
+}
+
+function resolveAdImage(value, imageElement) {
+    const raw = String(value || "").trim();
+
+    if (!raw) {
+        imageElement.removeAttribute("src");
+        return;
+    }
+
+    const candidates = [raw];
+
+    // Obsługa nazw wpisanych bez rozszerzenia, np. "xtb1".
+    if (!/\.(png|jpe?g|webp|gif|avif|svg)$/i.test(raw)) {
+        [".png", ".jpg", ".jpeg", ".webp", ".gif"].forEach(ext => {
+            candidates.push(raw + ext);
+        });
+    }
+
+    let candidateIndex = 0;
+
+    function tryNextImage() {
+        if (candidateIndex >= candidates.length) {
+            console.error("Nie udało się znaleźć grafiki reklamy:", raw);
+            imageElement.onerror = null;
+            return;
+        }
+
+        const candidate = candidates[candidateIndex++];
+        imageElement.src = new URL(candidate, window.location.href).href;
+    }
+
+    imageElement.onerror = tryNextImage;
+    tryNextImage();
 }
 
 function goToPendingProduct() {
     clearAdCountdown();
 
     const overlay = document.getElementById("adOverlay");
-    overlay.classList.remove("active");
-    overlay.setAttribute("aria-hidden", "true");
+    if (overlay) {
+        overlay.classList.remove("active");
+        overlay.setAttribute("aria-hidden", "true");
+    }
 
     if (pendingProductDestination) {
         window.location.href = pendingProductDestination;
     }
+}
+
+function activateAdSkipButton() {
+    const closeButton = document.getElementById("adCloseButton");
+    const countdown = document.getElementById("adCountdown");
+
+    if (!closeButton) return;
+
+    closeButton.disabled = false;
+    closeButton.classList.add("ready");
+    if (countdown) countdown.textContent = "możesz pominąć reklamę";
+    clearAdCountdown();
+}
+
+function updateAdCountdown() {
+    const closeButton = document.getElementById("adCloseButton");
+    const countdown = document.getElementById("adCountdown");
+
+    if (!closeButton || !countdown) return;
+
+    const millisecondsLeft = adSkipAt - Date.now();
+    const secondsLeft = Math.max(0, Math.ceil(millisecondsLeft / 1000));
+
+    if (millisecondsLeft <= 0) {
+        activateAdSkipButton();
+        return;
+    }
+
+    countdown.textContent = "możliwość pominięcia za " + secondsLeft + " s";
 }
 
 function openProductAd(type) {
@@ -1321,61 +1399,57 @@ function openProductAd(type) {
     const countdown = document.getElementById("adCountdown");
     const overlay = document.getElementById("adOverlay");
 
-    if (!ad || !ad.image) {
+    if (!ad || !ad.image || !image || !imageLink || !closeButton || !countdown || !overlay) {
         window.location.href = pendingProductDestination;
         return;
     }
 
     clearAdCountdown();
 
-    image.src = ad.image;
-    imageLink.href = ad.url || "#";
-    imageLink.classList.toggle("disabled", !ad.url);
+    const adDestination = normalizeAdUrl(ad.url);
+
+    resolveAdImage(ad.image, image);
+
+    imageLink.href = adDestination || "#";
+    imageLink.classList.toggle("disabled", !adDestination);
     imageLink.onclick = function(event) {
-        if (!ad.url) {
+        if (!adDestination) {
             event.preventDefault();
             return;
         }
 
-        // Kliknięcie grafiki reklamy prowadzi do ustawionego adresu.
         event.preventDefault();
-        window.location.href = ad.url;
+        window.location.href = adDestination;
     };
 
     closeButton.disabled = true;
     closeButton.classList.remove("ready");
     closeButton.textContent = "×";
 
-    let secondsLeft = Math.max(0, Number(AD_SKIP_DELAY) || 0);
-    countdown.textContent = "możliwość pominięcia za " + secondsLeft + " s";
+    const delaySeconds = Math.max(0, Number(AD_SKIP_DELAY) || 0);
+    adSkipAt = Date.now() + delaySeconds * 1000;
 
     overlay.classList.add("active");
     overlay.setAttribute("aria-hidden", "false");
 
-    if (secondsLeft === 0) {
-        closeButton.disabled = false;
-        closeButton.classList.add("ready");
-        countdown.textContent = "możesz pominąć reklamę";
+    if (delaySeconds === 0) {
+        activateAdSkipButton();
         return;
     }
 
-    adCountdownInterval = setInterval(function() {
-        secondsLeft--;
-
-        if (secondsLeft > 0) {
-            countdown.textContent = "możliwość pominięcia za " + secondsLeft + " s";
-        } else {
-            clearAdCountdown();
-            closeButton.disabled = false;
-            closeButton.classList.add("ready");
-            countdown.textContent = "możesz pominąć reklamę";
-        }
-    }, 1000);
+    updateAdCountdown();
+    adCountdownInterval = setInterval(updateAdCountdown, 200);
+    adCountdownTimeout = setTimeout(activateAdSkipButton, delaySeconds * 1000);
 }
 
-document.getElementById("adCloseButton").addEventListener("click", function() {
-    if (!this.disabled) {
-        goToPendingProduct();
+// Delegowany listener działa również wtedy, gdy okno reklamy znajduje się
+// w kodzie HTML poniżej tego skryptu.
+document.addEventListener("click", function(event) {
+    if (event.target && event.target.id === "adCloseButton") {
+        const closeButton = event.target;
+        if (!closeButton.disabled) {
+            goToPendingProduct();
+        }
     }
 });
 
