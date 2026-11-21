@@ -13,20 +13,42 @@ const X_chain = "off";
 const X_plyta = "off";
 const X_koszulka = "off";
 
-/* SYSTEM REKLAM — ZMIENNE ON/OFF I KONFIGURACJA */
+/* SYSTEM REKLAM — 10 PARY GRAFIKA + LINK */
 const ADS_ENABLED = "on"; // globalne ON/OFF
 
-const CHAIN_AD_ENABLED = "on";
-const ALBUM_AD_ENABLED = "on";
-const SHIRT_AD_ENABLED = "on";
+// Każdy numer grafiki odpowiada temu samemu numerowi linku.
+// Zostawiaj puste miejsca jako "" jeśli slot nie jest używany.
+const AD_IMAGES = [
+    "xtb1.png", // 1 — np. "xtb1.png"
+    "xtb2.png", // 2 — np. "opera1.png"
+    "opera1.png", // 3
+    "opera2.png", // 4
+    "holy.png", // 5
+    "holy1.png", // 6
+    "holy2.png", // 7
+    "holy3.png", // 8
+    "", // 9
+    ""  // 10
+];
 
-const CHAIN_AD_IMAGE = "xtb1.png"; // np. "reklama-chain.png"
-const ALBUM_AD_IMAGE = "xtb2.png"; // np. "reklama-album.png"
-const SHIRT_AD_IMAGE = "opera1.png"; // np. "reklama-koszulka.png"
+const AD_LINKS = [
+    "xtb.pl", // 1 — np. "https://xtb.pl"
+    "xtb.pl", // 2 — np. "https://operagx.gg"
+    "operagx.gg", // 3
+    "operagx.gg", // 4
+    "weareholy.pl", // 5
+    "weareholy.pl", // 6
+    "weareholy.pl", // 7
+    "weareholy.pl", // 8
+    "", // 9
+    ""  // 10
+];
 
-const CHAIN_AD_URL = "xtb.pl"; // adres strony reklamodawcy
-const ALBUM_AD_URL = "xtb.pl";
-const SHIRT_AD_URL = "operagx.gg";
+// Przełączniki dla poszczególnych numerów reklam: "on" albo "off".
+const AD_SLOT_ENABLED = [
+    "off", "off", "off", "off", "off",
+    "off", "off", "off", "off", "off"
+];
 
 const AD_SKIP_DELAY = 5; // sekundy do aktywacji X
 
@@ -1259,30 +1281,12 @@ audios.forEach((audio, id) => {
     audio.addEventListener("ended", () => resetVoice(id));
 });
 
-/* OTWIERANIE STRON PRODUKTÓW + REKLAMY PRZED PRZEJŚCIEM */
+/* OTWIERANIE STRON PRODUKTÓW + LOSOWE REKLAMY PRZED PRZEJŚCIEM */
 
 const productPages = {
     chain: "/chain/",
     album: "/album/",
     shirt: "/koszulka/"
-};
-
-const productAds = {
-    chain: {
-        enabled: CHAIN_AD_ENABLED,
-        image: CHAIN_AD_IMAGE,
-        url: CHAIN_AD_URL
-    },
-    album: {
-        enabled: ALBUM_AD_ENABLED,
-        image: ALBUM_AD_IMAGE,
-        url: ALBUM_AD_URL
-    },
-    shirt: {
-        enabled: SHIRT_AD_ENABLED,
-        image: SHIRT_AD_IMAGE,
-        url: SHIRT_AD_URL
-    }
 };
 
 let pendingProductDestination = "";
@@ -1324,7 +1328,6 @@ function resolveAdImage(value, imageElement) {
 
     const candidates = [raw];
 
-    // Obsługa nazw wpisanych bez rozszerzenia, np. "xtb1".
     if (!/\.(png|jpe?g|webp|gif|avif|svg)$/i.test(raw)) {
         [".png", ".jpg", ".jpeg", ".webp", ".gif"].forEach(ext => {
             candidates.push(raw + ext);
@@ -1391,25 +1394,49 @@ function updateAdCountdown() {
     countdown.textContent = "możliwość pominięcia za " + secondsLeft + " s";
 }
 
-function openProductAd(type) {
-    const ad = productAds[type];
+function getRandomActiveAd() {
+    const usableAds = [];
+
+    for (let i = 0; i < 10; i++) {
+        const image = String(AD_IMAGES[i] || "").trim();
+        const url = String(AD_LINKS[i] || "").trim();
+        const enabled = AD_SLOT_ENABLED[i] === "on";
+
+        if (enabled && image && url) {
+            usableAds.push({ image, url, number: i + 1 });
+        }
+    }
+
+    if (!usableAds.length) return null;
+
+    return usableAds[Math.floor(Math.random() * usableAds.length)];
+}
+
+function openProductAd() {
     const image = document.getElementById("adImage");
     const imageLink = document.getElementById("adImageLink");
     const closeButton = document.getElementById("adCloseButton");
     const countdown = document.getElementById("adCountdown");
     const overlay = document.getElementById("adOverlay");
 
-    if (!ad || !ad.image || !image || !imageLink || !closeButton || !countdown || !overlay) {
+    if (!image || !imageLink || !closeButton || !countdown || !overlay) {
+        window.location.href = pendingProductDestination;
+        return;
+    }
+
+    // Losowanie odbywa się od nowa przy każdym otwarciu okna reklamy.
+    const ad = getRandomActiveAd();
+
+    if (!ad) {
         window.location.href = pendingProductDestination;
         return;
     }
 
     clearAdCountdown();
 
-    const adDestination = normalizeAdUrl(ad.url);
-
     resolveAdImage(ad.image, image);
 
+    const adDestination = normalizeAdUrl(ad.url);
     imageLink.href = adDestination || "#";
     imageLink.classList.toggle("disabled", !adDestination);
     imageLink.onclick = function(event) {
@@ -1419,6 +1446,7 @@ function openProductAd(type) {
         }
 
         event.preventDefault();
+        clearAdCountdown();
         window.location.href = adDestination;
     };
 
@@ -1442,8 +1470,6 @@ function openProductAd(type) {
     adCountdownTimeout = setTimeout(activateAdSkipButton, delaySeconds * 1000);
 }
 
-// Delegowany listener działa również wtedy, gdy okno reklamy znajduje się
-// w kodzie HTML poniżej tego skryptu.
 document.addEventListener("click", function(event) {
     if (event.target && event.target.id === "adCloseButton") {
         const closeButton = event.target;
@@ -1472,15 +1498,8 @@ function order(type) {
 
     pendingProductDestination = destination;
 
-    const ad = productAds[type];
-    const shouldShowAd =
-        ADS_ENABLED === "on" &&
-        ad &&
-        ad.enabled === "on" &&
-        Boolean(ad.image);
-
-    if (shouldShowAd) {
-        openProductAd(type);
+    if (ADS_ENABLED === "on" && getRandomActiveAd()) {
+        openProductAd();
     } else {
         window.location.href = destination;
     }
