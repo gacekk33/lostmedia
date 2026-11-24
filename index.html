@@ -738,6 +738,51 @@ body {
     }
 }
 
+
+
+/* LOST MEDIA MEMBER */
+.member-section {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 12px;
+    position: relative;
+    z-index: 10;
+}
+
+.member-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    background: transparent;
+    border: none;
+    color: #bdbdbd;
+    font-family: inherit;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    padding: 3px 6px;
+    transition: color 0.2s;
+}
+
+.member-button:hover {
+    color: white;
+}
+
+.member-image {
+    display: block;
+    width: 17px;
+    height: 17px;
+    object-fit: contain;
+    animation: memberPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes memberPulse {
+    0%, 100% { transform: scale(0.85); }
+    50% { transform: scale(1.15); }
+}
+
 </style>
 </head>
 
@@ -765,6 +810,15 @@ body {
 <div class="banner" id="banner">
     <img src="banerlost.png" alt="Lost Media Banner">
 </div>
+
+<!-- LOST MEDIA MEMBER -->
+<div class="member-section">
+    <button class="member-button" id="memberButton" type="button" onclick="joinMember()">
+        <span id="memberText">zostań lostmedia member</span>
+        <img src="member.png" alt="Member" class="member-image">
+    </button>
+</div>
+
 
 <!-- GŁOSÓWKI -->
 
@@ -1504,6 +1558,42 @@ function order(type) {
         window.location.href = destination;
     }
 }
+
+
+
+/* LOST MEDIA MEMBER */
+let isMember = false;
+
+try {
+    isMember = localStorage.getItem("lostMediaMember") === "true";
+} catch (error) {
+    console.log("Nie można odczytać statusu member.");
+}
+
+function updateMemberButton() {
+    const text = document.getElementById("memberText");
+    if (!text) return;
+
+    text.textContent = isMember
+        ? "już jesteś lostmedia member"
+        : "zostań lostmedia member";
+}
+
+function joinMember() {
+    if (isMember) return;
+
+    isMember = true;
+
+    try {
+        localStorage.setItem("lostMediaMember", "true");
+    } catch (error) {
+        console.log("Nie można zapisać statusu member.");
+    }
+
+    updateMemberButton();
+}
+
+updateMemberButton();
 
 </script>
 
