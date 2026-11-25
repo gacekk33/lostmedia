@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -14,43 +15,40 @@ const X_plyta = "off";
 const X_koszulka = "on";
 
 /* SYSTEM REKLAM — 10 PARY GRAFIKA + LINK */
-const ADS_ENABLED = "on"; // globalne ON/OFF
+const ADS_ENABLED = "on";
 
-// Każdy numer grafiki odpowiada temu samemu numerowi linku.
-// Zostawiaj puste miejsca jako "" jeśli slot nie jest używany.
 const AD_IMAGES = [
-    "gaht1.png", // 1 — np. "xtb1.png"
-    "xtb2.png", // 2 — np. "opera1.png"
-    "gaht2.png", // 3
-    "opera2.png", // 4
-    "holy.png", // 5
-    "holy1.png", // 6
-    "holy2.png", // 7
-    "holy3.png", // 8
-    "anar2.png", // 9
-    "anar3.png"  // 10
+    "gaht1.png",
+    "xtb2.png",
+    "gaht2.png",
+    "opera2.png",
+    "holy.png",
+    "holy1.png",
+    "holy2.png",
+    "holy3.png",
+    "anar2.png",
+    "anar3.png"
 ];
 
 const AD_LINKS = [
-    "losttmedia.pl", // 1 — np. "https://xtb.pl"
-    "xtb.pl", // 2 — np. "https://operagx.gg"
-    "losttmedia.pl", // 3
-    "operagx.gg", // 4
-    "weareholy.pl", // 5
-    "weareholy.pl", // 6
-    "weareholy.pl", // 7
-    "weareholy.pl", // 8
-    "anarchia.gg", // 9
-    "anarchia.gg"  // 10
+    "losttmedia.pl",
+    "xtb.pl",
+    "losttmedia.pl",
+    "operagx.gg",
+    "weareholy.pl",
+    "weareholy.pl",
+    "weareholy.pl",
+    "weareholy.pl",
+    "anarchia.gg",
+    "anarchia.gg"
 ];
 
-// Przełączniki dla poszczególnych numerów reklam: "on" albo "off".
 const AD_SLOT_ENABLED = [
     "on", "on", "on", "on", "on",
     "on", "on", "on", "on", "on"
 ];
 
-const AD_SKIP_DELAY = 5; // sekundy do aktywacji X
+const AD_SKIP_DELAY = 5;
 
 const INFO_ITEMS = [
     "11.12",
@@ -92,11 +90,9 @@ const FAVORITES_COUNT = 8191;
 const SHIRT_FAVORITES_COUNT = 6529;
 const CHAIN_FAVORITES_COUNT = 5103;
 
-/* LICZBA DOSTEPNYCH SZTUK — ZMIENIAJ TE WARTOSCI */
 const CHAIN_REMAINING = 14;
 const SHIRT_REMAINING = 0;
 const ALBUM_REMAINING = 713;
-
 </script>
 
 <style>
@@ -292,7 +288,7 @@ body {
     letter-spacing: 0.5px;
 }
 
-/* INFO NA STRONIE GŁÓWNEJ */
+/* INFO */
 
 .info {
     position: absolute;
@@ -354,7 +350,7 @@ body {
     white-space: nowrap;
 }
 
-/* MIEJSCE NA INFORMACJE O PREORDERZE */
+/* PREORDER */
 
 .preorder-area {
     height: 125px;
@@ -387,7 +383,6 @@ body {
     text-align: center;
 }
 
-
 /* ZDJĘCIA PRODUKTÓW */
 
 .product {
@@ -416,7 +411,7 @@ body {
     50% { transform: scale(1.1); }
 }
 
-/* SYSTEM WYPRZEDANYCH */
+/* WYPRZEDANE */
 
 .sold-label {
     display: none;
@@ -466,7 +461,6 @@ body {
     0%, 100% {
         transform: translate(-50%, -50%) scale(1);
     }
-
     50% {
         transform: translate(-50%, -50%) scale(1.15);
     }
@@ -604,10 +598,9 @@ body {
         white-space: normal;
         margin-bottom: 30px;
     }
-
 }
 
-/* SYSTEM REKLAM — OKNO NA ŚRODKU EKRANU */
+/* REKLAMY */
 
 .ad-overlay {
     position: fixed;
@@ -708,9 +701,8 @@ body {
     }
 }
 
-
-
 /* LOST MEDIA MEMBER */
+
 .member-section {
     width: 100%;
     display: flex;
@@ -753,8 +745,8 @@ body {
     50% { transform: scale(1.15); }
 }
 
-
 /* ODZNAKI */
+
 .badges-home-button {
     position: fixed;
     top: 14px;
@@ -769,7 +761,11 @@ body {
     letter-spacing: .4px;
     cursor: pointer;
 }
-.badges-home-button:hover { color: white; border-color: #777; }
+
+.badges-home-button:hover {
+    color: white;
+    border-color: #777;
+}
 
 .badge-claim-wrap {
     width: 100%;
@@ -777,6 +773,7 @@ body {
     justify-content: center;
     margin: 0 0 17px;
 }
+
 .badge-claim-button {
     background: transparent;
     border: 1px solid #383838;
@@ -788,12 +785,18 @@ body {
     cursor: pointer;
     transition: .2s;
 }
-.badge-claim-button:hover { color: white; border-color: #777; }
+
+.badge-claim-button:hover {
+    color: white;
+    border-color: #777;
+}
+
 .badge-claim-button.claimed {
     color: #a5e6b2;
     border-color: #397a49;
     cursor: default;
 }
+
 .badge-screen {
     position: fixed;
     inset: 0;
@@ -807,13 +810,18 @@ body {
     text-align: center;
     padding: 25px;
 }
-.badge-screen.active { display: flex; }
+
+.badge-screen.active {
+    display: flex;
+}
+
 .badge-screen h2 {
     font-size: 17px;
     font-weight: normal;
     letter-spacing: 1px;
     margin-bottom: 30px;
 }
+
 .badge-award-image {
     width: 190px;
     max-width: 55vw;
@@ -821,10 +829,12 @@ body {
     object-fit: contain;
     animation: badgePulse 2s ease-in-out infinite;
 }
+
 @keyframes badgePulse {
     0%, 100% { transform: scale(1); }
     50% { transform: scale(.82); }
 }
+
 .badge-return {
     position: absolute;
     bottom: 35px;
@@ -836,13 +846,19 @@ body {
     font-size: 12px;
     cursor: pointer;
 }
-.badge-return:hover { color: white; border-color: #888; }
+
+.badge-return:hover {
+    color: white;
+    border-color: #888;
+}
+
 .badge-collection-item {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 15px;
 }
+
 .badge-collection-item img {
     width: 150px;
     max-width: 50vw;
@@ -850,56 +866,178 @@ body {
     object-fit: contain;
     animation: badgePulse 2s ease-in-out infinite;
 }
+
 .badge-collection-item span {
     color: #bdbdbd;
     font-size: 13px;
     letter-spacing: .5px;
 }
+
 @media (max-width: 600px) {
-    .badges-home-button { top: 8px; left: 8px; font-size: 10px; padding: 7px 9px; }
-    .badge-screen h2 { font-size: 15px; }
+    .badges-home-button {
+        top: 8px;
+        left: 8px;
+        font-size: 10px;
+        padding: 7px 9px;
+    }
+
+    .badge-screen h2 {
+        font-size: 15px;
+    }
 }
 
-
 /* KONTA LOST MEDIA */
-.account-status{position:fixed;top:14px;right:16px;z-index:101;display:flex;align-items:center;gap:9px;color:#aaa;font-size:11px}
-.account-status button,.auth-actions button{border:1px solid #383838;background:#151515;color:#ddd;padding:8px 11px;font:inherit;cursor:pointer}
-.account-status button:hover,.auth-actions button:hover{color:white;border-color:#777}
-.auth-overlay{position:fixed;inset:0;z-index:100010;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.88)}
-.auth-overlay.active{display:flex}
-.auth-box{width:min(360px,100%);background:#101010;border:1px solid #383838;padding:25px;display:flex;flex-direction:column;gap:13px}
-.auth-box h2{font-size:17px;font-weight:normal;letter-spacing:1px;text-align:center;margin-bottom:5px}
-.auth-box input{width:100%;background:#1b1b1b;border:1px solid #383838;color:white;padding:12px;outline:none}
-.auth-actions{display:flex;gap:8px}.auth-actions button{flex:1}
-.auth-message{min-height:16px;color:#aaa;font-size:11px;text-align:center}
-.auth-close{align-self:center;background:transparent;border:0;color:#888;cursor:pointer;padding:5px}
-@media(max-width:600px){.account-status{top:48px;right:8px}}
 
+.account-status {
+    position: fixed;
+    top: 14px;
+    right: 16px;
+    z-index: 101;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: #aaa;
+    font-size: 11px;
+}
+
+.account-status button,
+.auth-actions button {
+    border: 1px solid #383838;
+    background: #151515;
+    color: #ddd;
+    padding: 8px 11px;
+    font: inherit;
+    cursor: pointer;
+}
+
+.account-status button:hover,
+.auth-actions button:hover {
+    color: white;
+    border-color: #777;
+}
+
+/* NOWY PRZYCISK MÓJ PROFIL */
+
+.profile-home-button {
+    display: none;
+    border: 1px solid #383838;
+    background: #151515;
+    color: #ddd;
+    padding: 8px 11px;
+    font: inherit;
+    font-size: 11px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.profile-home-button.active {
+    display: inline-block;
+}
+
+.profile-home-button:hover {
+    color: white;
+    border-color: #777;
+}
+
+.auth-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100010;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(0,0,0,.88);
+}
+
+.auth-overlay.active {
+    display: flex;
+}
+
+.auth-box {
+    width: min(360px,100%);
+    background: #101010;
+    border: 1px solid #383838;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+}
+
+.auth-box h2 {
+    font-size: 17px;
+    font-weight: normal;
+    letter-spacing: 1px;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.auth-box input {
+    width: 100%;
+    background: #1b1b1b;
+    border: 1px solid #383838;
+    color: white;
+    padding: 12px;
+    outline: none;
+}
+
+.auth-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.auth-actions button {
+    flex: 1;
+}
+
+.auth-message {
+    min-height: 16px;
+    color: #aaa;
+    font-size: 11px;
+    text-align: center;
+}
+
+.auth-close {
+    align-self: center;
+    background: transparent;
+    border: 0;
+    color: #888;
+    cursor: pointer;
+    padding: 5px;
+}
+
+@media(max-width:600px) {
+    .account-status {
+        top: 48px;
+        right: 8px;
+        gap: 5px;
+        font-size: 10px;
+    }
+
+    .profile-home-button,
+    .account-status button {
+        padding: 7px 8px;
+        font-size: 10px;
+    }
+}
 </style>
 </head>
 
 <body>
 
 <button class="badges-home-button" type="button" onclick="openBadgeCollection()">zobacz swoje odznaki</button>
-<div class="account-status">
-<span id="accountLabel">niezalogowano</span>
-<button type="button" id="accountAction" onclick="openAuth()">zaloguj / zarejestruj</button>
-</div>
 
+<div class="account-status">
+    <span id="accountLabel">niezalogowano</span>
+    <a href="/profil/" id="profileHomeButton" class="profile-home-button">mój profil</a>
+    <button type="button" id="accountAction" onclick="openAuth()">zaloguj / zarejestruj</button>
+</div>
 
 <div class="maintenance" id="maintenance">
     <div class="maintenance-content">
         <div>wróć o 18:33</div>
-
-        <input
-            type="password"
-            id="maintenancePassword"
-            placeholder="hasło..."
-            autocomplete="off"
-        >
-
+        <input type="password" id="maintenancePassword" placeholder="hasło..." autocomplete="off">
         <button onclick="unlockSite()">wejdź</button>
-
         <div id="passwordError"></div>
     </div>
 </div>
@@ -911,13 +1049,13 @@ body {
 </div>
 
 <!-- LOST MEDIA MEMBER -->
+
 <div class="member-section">
     <button class="member-button" id="memberButton" type="button" onclick="joinMember()">
         <span id="memberText">zostań lostmedia member</span>
         <img src="member.png" alt="Member" class="member-image">
     </button>
 </div>
-
 
 <!-- GŁOSÓWKI -->
 
@@ -998,31 +1136,13 @@ body {
             <h1 class="product-title">kup chain lost media (333zł)</h1>
 
             <div class="product-image-wrap">
-                <img
-                    src="chain1.png"
-                    class="chain-product"
-                    alt="Chain Lost Media"
-                    onclick="order('chain')"
-                >
-
-                <img
-                    src="wyprzedane.png"
-                    class="sold-overlay"
-                    alt=""
-                >
+                <img src="chain1.png" class="chain-product" alt="Chain Lost Media" onclick="order('chain')">
+                <img src="wyprzedane.png" class="sold-overlay" alt="">
             </div>
 
             <div class="favorite-section">
-                <button
-                    class="favorite-btn"
-                    id="chainFavoriteBtn"
-                    onclick="toggleChainFavorite()"
-                >
-                    ☆ dodaj do ulubionych
-                </button>
-
+                <button class="favorite-btn" id="chainFavoriteBtn" onclick="toggleChainFavorite()">☆ dodaj do ulubionych</button>
                 <div class="remaining-count" id="chainRemaining"></div>
-
                 <div class="favorite-count">
                     <span class="favorite-dot"></span>
                     <span id="chainFavoriteCount"></span>
@@ -1034,14 +1154,8 @@ body {
 
         <div class="product-card" id="albumCard">
             <div class="preorder-area">
-                <div class="preorder-date">
-                    preorder od 19.11 do 05.12
-                </div>
-
-                <div class="preorder-subtitle">
-                    lub do wyczerpania zapasów
-                </div>
-
+                <div class="preorder-date">preorder od 19.11 do 05.12</div>
+                <div class="preorder-subtitle">lub do wyczerpania zapasów</div>
             </div>
 
             <div class="badge-claim-wrap">
@@ -1055,31 +1169,13 @@ body {
             <h1 class="product-title">kup płyte lost media (70zł)</h1>
 
             <div class="product-image-wrap">
-                <img
-                    src="lostmedia.png"
-                    class="product"
-                    alt="Lost Media"
-                    onclick="order('album')"
-                >
-
-                <img
-                    src="wyprzedane.png"
-                    class="sold-overlay"
-                    alt=""
-                >
+                <img src="lostmedia.png" class="product" alt="Lost Media" onclick="order('album')">
+                <img src="wyprzedane.png" class="sold-overlay" alt="">
             </div>
 
             <div class="favorite-section">
-                <button
-                    class="favorite-btn"
-                    id="favoriteBtn"
-                    onclick="toggleFavorite()"
-                >
-                    ☆ dodaj do ulubionych
-                </button>
-
+                <button class="favorite-btn" id="favoriteBtn" onclick="toggleFavorite()">☆ dodaj do ulubionych</button>
                 <div class="remaining-count" id="albumRemaining"></div>
-
                 <div class="favorite-count">
                     <span class="favorite-dot"></span>
                     <span id="favoriteCount"></span>
@@ -1096,31 +1192,13 @@ body {
             <h1 class="product-title">kup koszulke lost media (133zł)</h1>
 
             <div class="product-image-wrap">
-                <img
-                    src="koszulka1.png"
-                    class="shirt-product"
-                    alt="Koszulka Lost Media"
-                    onclick="order('shirt')"
-                >
-
-                <img
-                    src="wyprzedane.png"
-                    class="sold-overlay"
-                    alt=""
-                >
+                <img src="koszulka1.png" class="shirt-product" alt="Koszulka Lost Media" onclick="order('shirt')">
+                <img src="wyprzedane.png" class="sold-overlay" alt="">
             </div>
 
             <div class="favorite-section">
-                <button
-                    class="favorite-btn"
-                    id="shirtFavoriteBtn"
-                    onclick="toggleShirtFavorite()"
-                >
-                    ☆ dodaj do ulubionych
-                </button>
-
+                <button class="favorite-btn" id="shirtFavoriteBtn" onclick="toggleShirtFavorite()">☆ dodaj do ulubionych</button>
                 <div class="remaining-count" id="shirtRemaining"></div>
-
                 <div class="favorite-count">
                     <span class="favorite-dot"></span>
                     <span id="shirtFavoriteCount"></span>
@@ -1152,11 +1230,8 @@ function unlockSite() {
 }
 
 document.getElementById("maintenancePassword").addEventListener("keydown", function(event) {
-    if (event.key === "Enter") {
-        unlockSite();
-    }
+    if (event.key === "Enter") unlockSite();
 });
-
 
 /* SYSTEM WYPRZEDANYCH PRODUKTÓW */
 
@@ -1168,21 +1243,17 @@ function setSoldOut(type, status) {
     };
 
     const selectedCard = document.getElementById(cards[type]);
-
     if (!selectedCard) return;
 
-    if (status === "on") {
-        selectedCard.classList.add("sold-out");
-    } else {
-        selectedCard.classList.remove("sold-out");
-    }
+    if (status === "on") selectedCard.classList.add("sold-out");
+    else selectedCard.classList.remove("sold-out");
 }
 
 setSoldOut("chain", X_chain);
 setSoldOut("album", X_plyta);
 setSoldOut("shirt", X_koszulka);
 
-/* FUNKCJA WYŚWIETLANIA INFO */
+/* INFO */
 
 function displayInfo(items, elementId) {
     const list = document.getElementById(elementId);
@@ -1199,25 +1270,15 @@ displayInfo(INFO_ITEMS, "infoList");
 
 /* POZOSTAŁA LICZBA SZTUK */
 
-document.getElementById("chainRemaining").textContent =
-    "zostało " + CHAIN_REMAINING + " sztuk";
-
-document.getElementById("shirtRemaining").textContent =
-    "zostało " + SHIRT_REMAINING + " sztuk";
-
-document.getElementById("albumRemaining").textContent =
-    "zostało " + ALBUM_REMAINING + " sztuk";
+document.getElementById("chainRemaining").textContent = "zostało " + CHAIN_REMAINING + " sztuk";
+document.getElementById("shirtRemaining").textContent = "zostało " + SHIRT_REMAINING + " sztuk";
+document.getElementById("albumRemaining").textContent = "zostało " + ALBUM_REMAINING + " sztuk";
 
 /* LICZNIKI ULUBIONYCH */
 
-document.getElementById("favoriteCount").textContent =
-    FAVORITES_COUNT + " osób dodało do ulubionych";
-
-document.getElementById("shirtFavoriteCount").textContent =
-    SHIRT_FAVORITES_COUNT + " osób dodało do ulubionych";
-
-document.getElementById("chainFavoriteCount").textContent =
-    CHAIN_FAVORITES_COUNT + " osób dodało do ulubionych";
+document.getElementById("favoriteCount").textContent = FAVORITES_COUNT + " osób dodało do ulubionych";
+document.getElementById("shirtFavoriteCount").textContent = SHIRT_FAVORITES_COUNT + " osób dodało do ulubionych";
+document.getElementById("chainFavoriteCount").textContent = CHAIN_FAVORITES_COUNT + " osób dodało do ulubionych";
 
 /* ULUBIONE PŁYTY */
 
@@ -1260,8 +1321,7 @@ updateFavoriteButton();
 let isShirtFavorite = false;
 
 try {
-    isShirtFavorite =
-        localStorage.getItem("lostMediaShirtFavorite") === "true";
+    isShirtFavorite = localStorage.getItem("lostMediaShirtFavorite") === "true";
 } catch (error) {
     console.log("Nie można odczytać ulubionych koszulki.");
 }
@@ -1297,8 +1357,7 @@ updateShirtFavoriteButton();
 let isChainFavorite = false;
 
 try {
-    isChainFavorite =
-        localStorage.getItem("lostMediaChainFavorite") === "true";
+    isChainFavorite = localStorage.getItem("lostMediaChainFavorite") === "true";
 } catch (error) {
     console.log("Nie można odczytać ulubionych chaina.");
 }
@@ -1333,8 +1392,6 @@ updateChainFavoriteButton();
 
 const audios = Array.from(document.querySelectorAll(".voice-audio"));
 
-/* TWORZENIE FALI */
-
 function createWave(id) {
     const wave = document.getElementById("wave" + id);
 
@@ -1349,8 +1406,6 @@ function createWave(id) {
 
 audios.forEach((audio, id) => createWave(id));
 
-/* RESET GŁOSÓWEK */
-
 function resetVoice(id) {
     const audio = audios[id];
 
@@ -1358,15 +1413,9 @@ function resetVoice(id) {
     audio.currentTime = 0;
 
     document.querySelectorAll(".play-btn")[id].textContent = "▶";
-
-    document.getElementById("wave" + id)
-        .classList.remove("playing");
-
-    document.getElementById("time" + id)
-        .textContent = "00:00";
+    document.getElementById("wave" + id).classList.remove("playing");
+    document.getElementById("time" + id).textContent = "00:00";
 }
-
-/* ODTWARZANIE GŁOSÓWEK */
 
 function toggleVoice(id) {
     const audio = audios[id];
@@ -1377,7 +1426,6 @@ function toggleVoice(id) {
     }
 
     audios.forEach((other, i) => resetVoice(i));
-
     audio.currentTime = 0;
 
     audio.play().then(() => {
@@ -1387,8 +1435,6 @@ function toggleVoice(id) {
         console.log("Błąd odtwarzania:", error);
     });
 }
-
-/* CZAS NAGRANIA */
 
 audios.forEach((audio, id) => {
     audio.addEventListener("timeupdate", () => {
@@ -1403,7 +1449,7 @@ audios.forEach((audio, id) => {
     audio.addEventListener("ended", () => resetVoice(id));
 });
 
-/* OTWIERANIE STRON PRODUKTÓW + LOSOWE REKLAMY PRZED PRZEJŚCIEM */
+/* PRODUKTY + REKLAMY */
 
 const productPages = {
     chain: "/chain/",
@@ -1477,6 +1523,7 @@ function goToPendingProduct() {
     clearAdCountdown();
 
     const overlay = document.getElementById("adOverlay");
+
     if (overlay) {
         overlay.classList.remove("active");
         overlay.setAttribute("aria-hidden", "true");
@@ -1495,7 +1542,9 @@ function activateAdSkipButton() {
 
     closeButton.disabled = false;
     closeButton.classList.add("ready");
+
     if (countdown) countdown.textContent = "możesz pominąć reklamę";
+
     clearAdCountdown();
 }
 
@@ -1546,7 +1595,6 @@ function openProductAd() {
         return;
     }
 
-    // Losowanie odbywa się od nowa przy każdym otwarciu okna reklamy.
     const ad = getRandomActiveAd();
 
     if (!ad) {
@@ -1555,12 +1603,13 @@ function openProductAd() {
     }
 
     clearAdCountdown();
-
     resolveAdImage(ad.image, image);
 
     const adDestination = normalizeAdUrl(ad.url);
+
     imageLink.href = adDestination || "#";
     imageLink.classList.toggle("disabled", !adDestination);
+
     imageLink.onclick = function(event) {
         if (!adDestination) {
             event.preventDefault();
@@ -1595,6 +1644,7 @@ function openProductAd() {
 document.addEventListener("click", function(event) {
     if (event.target && event.target.id === "adCloseButton") {
         const closeButton = event.target;
+
         if (!closeButton.disabled) {
             goToPendingProduct();
         }
@@ -1608,15 +1658,10 @@ function order(type) {
         shirt: X_koszulka
     };
 
-    if (soldOutProducts[type] === "on") {
-        return;
-    }
+    if (soldOutProducts[type] === "on") return;
 
     const destination = productPages[type];
-
-    if (!destination) {
-        return;
-    }
+    if (!destination) return;
 
     pendingProductDestination = destination;
 
@@ -1627,13 +1672,8 @@ function order(type) {
     }
 }
 
+/* KONTA + LOST MEDIA MEMBER + ODZNAKI */
 
-
-/* KONTA + LOST MEDIA MEMBER + ODZNAKI
-   Wersja front-end: konta zapisują się lokalnie w tej przeglądarce. */
-
-// Reset poprzedniego systemu MEMBER i starych odznak na tym urządzeniu.
-// Nie usuwa danych z innych urządzeń ani z serwera.
 try {
     localStorage.removeItem("lostMediaMember");
     localStorage.removeItem("lostMediaFirstDropBadge");
@@ -1643,15 +1683,23 @@ const ACCOUNTS_STORAGE_KEY = "lostMediaAccounts_v1";
 const SESSION_STORAGE_KEY = "lostMediaCurrentUser_v1";
 
 function readAccounts() {
-    try { return JSON.parse(localStorage.getItem(ACCOUNTS_STORAGE_KEY) || "{}"); }
-    catch (error) { return {}; }
+    try {
+        return JSON.parse(localStorage.getItem(ACCOUNTS_STORAGE_KEY) || "{}");
+    } catch (error) {
+        return {};
+    }
 }
+
 function saveAccounts(value) {
     localStorage.setItem(ACCOUNTS_STORAGE_KEY, JSON.stringify(value));
 }
+
 function getCurrentUsername() {
-    try { return localStorage.getItem(SESSION_STORAGE_KEY) || ""; }
-    catch (error) { return ""; }
+    try {
+        return localStorage.getItem(SESSION_STORAGE_KEY) || "";
+    } catch (error) {
+        return "";
+    }
 }
 
 let currentUsername = getCurrentUsername();
@@ -1661,93 +1709,181 @@ function currentAccount() {
     accounts = readAccounts();
     return currentUsername && accounts[currentUsername] ? accounts[currentUsername] : null;
 }
+
 function openAuth() {
     document.getElementById("authMessage").textContent = "";
     document.getElementById("authOverlay").classList.add("active");
     document.getElementById("authOverlay").setAttribute("aria-hidden", "false");
 }
+
 function closeAuth() {
     document.getElementById("authOverlay").classList.remove("active");
     document.getElementById("authOverlay").setAttribute("aria-hidden", "true");
 }
+
 function registerAccount() {
     const username = document.getElementById("authUsername").value.trim();
     const password = document.getElementById("authPassword").value;
     const message = document.getElementById("authMessage");
+
     if (!/^[a-zA-Z0-9_]{3,24}$/.test(username)) {
-        message.textContent = "login: 3–24 znaki, litery, cyfry lub _"; return;
+        message.textContent = "login: 3–24 znaki, litery, cyfry lub _";
+        return;
     }
+
     if (password.length < 6) {
-        message.textContent = "hasło musi mieć minimum 6 znaków"; return;
+        message.textContent = "hasło musi mieć minimum 6 znaków";
+        return;
     }
+
     accounts = readAccounts();
+
     const key = username.toLowerCase();
-    if (accounts[key]) { message.textContent = "taki login jest już zajęty"; return; }
-    accounts[key] = { username: username, password: password, firstDropBadge: false };
+
+    if (accounts[key]) {
+        message.textContent = "taki login jest już zajęty";
+        return;
+    }
+
+    accounts[key] = {
+        username: username,
+        password: password,
+        firstDropBadge: false,
+        createdAt: "2026-11-25T12:00:00"
+    };
+
     try {
         saveAccounts(accounts);
         currentUsername = key;
         localStorage.setItem(SESSION_STORAGE_KEY, key);
-        updateMemberButton(); updateBadgeClaimButton(); updateAccountUI();
+
+        updateMemberButton();
+        updateBadgeClaimButton();
+        updateAccountUI();
+
         message.textContent = "konto utworzone — jesteś zalogowany";
         setTimeout(closeAuth, 700);
-    } catch (error) { message.textContent = "nie udało się zapisać konta"; }
+    } catch (error) {
+        message.textContent = "nie udało się zapisać konta";
+    }
 }
+
 function loginAccount() {
     const username = document.getElementById("authUsername").value.trim().toLowerCase();
     const password = document.getElementById("authPassword").value;
     const message = document.getElementById("authMessage");
+
     accounts = readAccounts();
+
     const account = accounts[username];
+
     if (!account || account.password !== password) {
-        message.textContent = "nieprawidłowy login lub hasło"; return;
+        message.textContent = "nieprawidłowy login lub hasło";
+        return;
     }
+
     currentUsername = username;
+
+    /* Uzupełnienie daty dla starszych kont */
+    if (!account.createdAt) {
+        account.createdAt = "2026-11-25T12:00:00";
+
+        try {
+            accounts[username] = account;
+            saveAccounts(accounts);
+        } catch (error) {
+            console.log("Nie udało się zapisać daty konta.");
+        }
+    }
+
     try {
         localStorage.setItem(SESSION_STORAGE_KEY, username);
-        updateMemberButton(); updateBadgeClaimButton(); updateAccountUI();
+
+        updateMemberButton();
+        updateBadgeClaimButton();
+        updateAccountUI();
+
         message.textContent = "zalogowano";
         setTimeout(closeAuth, 500);
-    } catch (error) { message.textContent = "nie udało się zalogować"; }
+    } catch (error) {
+        message.textContent = "nie udało się zalogować";
+    }
 }
+
 function logoutAccount() {
     currentUsername = "";
-    try { localStorage.removeItem(SESSION_STORAGE_KEY); } catch (error) {}
-    updateMemberButton(); updateBadgeClaimButton(); updateAccountUI();
+
+    try {
+        localStorage.removeItem(SESSION_STORAGE_KEY);
+    } catch (error) {}
+
+    updateMemberButton();
+    updateBadgeClaimButton();
+    updateAccountUI();
 }
+
+/* AKTUALIZACJA STATUSU KONTA I PRZYCISKU PROFILU */
+
 function updateAccountUI() {
     const account = currentAccount();
+
     const label = document.getElementById("accountLabel");
     const action = document.getElementById("accountAction");
+    const profileButton = document.getElementById("profileHomeButton");
+
     if (account) {
         label.textContent = account.username + " • member";
         action.textContent = "wyloguj";
         action.onclick = logoutAccount;
+
+        if (profileButton) {
+            profileButton.classList.add("active");
+        }
     } else {
         label.textContent = "niezalogowano";
         action.textContent = "zaloguj / zarejestruj";
         action.onclick = openAuth;
+
+        if (profileButton) {
+            profileButton.classList.remove("active");
+        }
     }
 }
+
 function updateMemberButton() {
     const text = document.getElementById("memberText");
-    if (text) text.textContent = currentAccount()
-        ? "już jesteś lostmedia member" : "zostań lostmedia member";
+
+    if (text) {
+        text.textContent = currentAccount()
+            ? "już jesteś lostmedia member"
+            : "zostań lostmedia member";
+    }
 }
+
 function joinMember() {
-    if (currentAccount()) { alert("jesteś już zalogowany jako lostmedia member."); return; }
+    if (currentAccount()) {
+        alert("jesteś już zalogowany jako lostmedia member.");
+        return;
+    }
+
     openAuth();
 }
 
+/* ODZNAKI */
+
 let hasFirstDropBadge = false;
+
 function refreshBadgeState() {
     const account = currentAccount();
     hasFirstDropBadge = !!(account && account.firstDropBadge);
 }
+
 function updateBadgeClaimButton() {
     refreshBadgeState();
+
     const button = document.getElementById("claimBadgeButton");
     if (!button) return;
+
     if (hasFirstDropBadge) {
         button.textContent = "odebrano nagrodę";
         button.classList.add("claimed");
@@ -1758,48 +1894,75 @@ function updateBadgeClaimButton() {
         button.disabled = false;
     }
 }
+
 function claimFirstDropBadge() {
     const account = currentAccount();
+
     if (!account) {
         alert("aby odebrać odznakę, musisz się zarejestrować lub zalogować.");
-        openAuth(); return;
+        openAuth();
+        return;
     }
+
     if (account.firstDropBadge) return;
+
     accounts = readAccounts();
     accounts[currentUsername].firstDropBadge = true;
-    try { saveAccounts(accounts); }
-    catch (error) { alert("nie udało się zapisać odznaki."); return; }
+
+    try {
+        saveAccounts(accounts);
+    } catch (error) {
+        alert("nie udało się zapisać odznaki.");
+        return;
+    }
+
     hasFirstDropBadge = true;
     updateBadgeClaimButton();
+
     document.getElementById("badgeRewardScreen").classList.add("active");
     document.getElementById("badgeRewardScreen").setAttribute("aria-hidden", "false");
 }
+
 function openBadgeCollection() {
     const content = document.getElementById("badgeCollectionContent");
     content.innerHTML = "";
+
     refreshBadgeState();
+
     if (hasFirstDropBadge) {
         const image = document.createElement("img");
-        image.src = "drop1.png"; image.alt = "Odznaka pierwszego dropu";
+        image.src = "drop1.png";
+        image.alt = "Odznaka pierwszego dropu";
+
         const label = document.createElement("span");
         label.textContent = "odznaka pierwszego dropu";
-        content.appendChild(image); content.appendChild(label);
+
+        content.appendChild(image);
+        content.appendChild(label);
     } else {
         const empty = document.createElement("span");
+
         empty.textContent = currentAccount()
             ? "nie masz jeszcze żadnych odznak"
             : "zaloguj się, aby zobaczyć swoje odznaki";
+
         content.appendChild(empty);
     }
+
     document.getElementById("badgeCollectionScreen").classList.add("active");
     document.getElementById("badgeCollectionScreen").setAttribute("aria-hidden", "false");
 }
+
 function closeBadgeCollection() {
     const screen = document.getElementById("badgeCollectionScreen");
+
     screen.classList.remove("active");
     screen.setAttribute("aria-hidden", "true");
 }
-function returnToHome() { window.location.href = "/"; }
+
+function returnToHome() {
+    window.location.href = "/";
+}
 
 updateBadgeClaimButton();
 updateMemberButton();
@@ -1808,12 +1971,12 @@ updateAccountUI();
 </script>
 
 <!-- OKNO REKLAMOWE -->
+
 <div class="ad-overlay" id="adOverlay" aria-hidden="true">
     <div class="ad-modal" role="dialog" aria-modal="true" aria-label="Reklama">
         <div class="ad-topbar">
             <span>REKLAMA</span>
-            <button class="ad-close" id="adCloseButton" type="button" disabled
-                aria-label="Zamknij reklamę">×</button>
+            <button class="ad-close" id="adCloseButton" type="button" disabled aria-label="Zamknij reklamę">×</button>
         </div>
 
         <a class="ad-image-link" id="adImageLink" href="#" aria-label="Otwórz reklamę">
@@ -1824,8 +1987,8 @@ updateAccountUI();
     </div>
 </div>
 
-
 <!-- EKRAN ODEBRANIA ODZNAKI -->
+
 <div class="badge-screen" id="badgeRewardScreen" aria-hidden="true">
     <h2>odebrano nagrodę</h2>
     <img class="badge-award-image" src="drop1.png" alt="Odznaka pierwszego dropu">
@@ -1833,30 +1996,34 @@ updateAccountUI();
 </div>
 
 <!-- KOLEKCJA ODZNAK -->
+
 <div class="badge-screen" id="badgeCollectionScreen" aria-hidden="true">
     <h2>twoje odznaki</h2>
     <div class="badge-collection-item" id="badgeCollectionContent"></div>
     <button class="badge-return" type="button" onclick="closeBadgeCollection()">wróć do strony głównej</button>
 </div>
 
+<!-- LOGOWANIE / REJESTRACJA -->
 
 <div class="auth-overlay" id="authOverlay" aria-hidden="true">
-<div class="auth-box">
-<h2>konto lost media</h2>
-<input id="authUsername" type="text" maxlength="24" placeholder="login" autocomplete="username">
-<input id="authPassword" type="password" maxlength="100" placeholder="hasło" autocomplete="current-password">
-<div class="auth-actions">
-<button type="button" onclick="registerAccount()">zarejestruj</button>
-<button type="button" onclick="loginAccount()">zaloguj</button>
-</div>
-<div class="auth-message" id="authMessage"></div>
-<button class="auth-close" type="button" onclick="closeAuth()">zamknij</button>
-</div>
-</div>
+    <div class="auth-box">
+        <h2>konto lost media</h2>
 
+        <input id="authUsername" type="text" maxlength="24" placeholder="login" autocomplete="username">
+        <input id="authPassword" type="password" maxlength="100" placeholder="hasło" autocomplete="current-password">
 
+        <div class="auth-actions">
+            <button type="button" onclick="registerAccount()">zarejestruj</button>
+            <button type="button" onclick="loginAccount()">zaloguj</button>
+        </div>
+
+        <div class="auth-message" id="authMessage"></div>
+        <button class="auth-close" type="button" onclick="closeAuth()">zamknij</button>
+    </div>
+</div>
 
 <!-- UKRYTA WSKAZÓWKA SECRET PAGE — CELOWO NA SAMYM DOLE STRONY -->
+
 <style>
 .secretpage-hidden-zone {
     width: 100%;
@@ -1868,13 +2035,18 @@ updateAccountUI();
     padding: 0 20px 35px;
     box-sizing: border-box;
 }
+
 .secretpage-hidden-link {
     display: inline-block;
     opacity: .82;
     line-height: 0;
     transition: opacity .25s ease;
 }
-.secretpage-hidden-link:hover { opacity: 1; }
+
+.secretpage-hidden-link:hover {
+    opacity: 1;
+}
+
 .secretpage-hidden-link img {
     display: block;
     width: 150px;
@@ -1882,6 +2054,7 @@ updateAccountUI();
     height: auto;
 }
 </style>
+
 <div class="secretpage-hidden-zone">
     <a class="secretpage-hidden-link" href="/secretpage/" aria-label="secretpage">
         <img src="secretpage.png" alt="">
