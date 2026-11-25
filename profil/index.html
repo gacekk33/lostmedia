@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -35,8 +36,8 @@ button.danger{background:transparent;color:#aaa;border-color:#333}
 .stat strong{display:block;font-size:25px;margin-bottom:7px}
 .stat span{font-size:9px;letter-spacing:2px;color:var(--muted)}
 .badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:10px}
-.badge-card{border:1px solid var(--line);padding:18px;min-height:125px;background:#0a0a0a}
-.badge-icon{width:40px;height:40px;border:1px solid #555;display:grid;place-items:center;font-size:20px;margin-bottom:13px}
+.badge-card{border:1px solid var(--line);padding:18px;min-height:155px;background:#0a0a0a}
+.badge-icon{width:76px;height:76px;object-fit:contain;display:block;margin-bottom:13px}
 .badge-card strong{font-size:11px;letter-spacing:1px;display:block}
 .badge-card small{display:block;color:var(--muted);font-size:10px;margin-top:7px;line-height:1.5}
 .empty{color:#777;font-size:12px;line-height:1.7;border:1px dashed #333;padding:22px}
@@ -57,204 +58,326 @@ footer{text-align:center;color:#555;font-size:9px;letter-spacing:3px;padding:24p
 </style>
 </head>
 <body>
-<header class="top"><a class="logo" href="/">LOST MEDIA</a><a href="/">POWRÓT NA STRONĘ ↗</a></header>
+
+<header class="top">
+<a class="logo" href="/">LOST MEDIA</a>
+<a href="/">POWRÓT NA STRONĘ ↗</a>
+</header>
+
 <main class="wrap">
-  <div id="gate" class="panel gate hidden">
-    <div class="kicker">PRIVATE AREA / 001</div>
-    <h1>PROFIL niedostępny.</h1>
-    <p>Żeby zobaczyć swój profil, zaloguj się na stronie głównej na konto LOST MEDIA.</p>
-    <a class="button" href="/">WRÓĆ DO STRONY GŁÓWNEJ</a>
-  </div>
 
-  <div id="profile" class="hidden">
-    <div class="kicker">LOST MEDIA / MEMBER AREA</div>
-    <h1>TWÓJ PROFIL<span style="color:#666">.</span></h1>
+<div id="gate" class="panel gate hidden">
+<div class="kicker">PRIVATE AREA / 001</div>
+<h1>PROFIL niedostępny.</h1>
+<p>Żeby zobaczyć swój profil, zaloguj się na stronie głównej na konto LOST MEDIA.</p>
+<a class="button" href="/">WRÓĆ DO STRONY GŁÓWNEJ</a>
+</div>
 
-    <section class="panel">
-      <div class="profile-head">
-        <div class="avatar" id="avatarBox"><span id="avatarFallback">?</span><img id="avatarImage" class="hidden" alt="Avatar użytkownika"></div>
-        <div class="identity">
-          <div class="username" id="displayName">USER</div>
-          <div class="member">LOST MEDIA MEMBER</div>
-          <div class="idline" id="memberId">MEMBER ID: —</div>
-        </div>
-        <button class="secondary" id="editToggle">EDYTUJ PROFIL</button>
-      </div>
-    </section>
+<div id="profile" class="hidden">
 
-    <section class="panel">
-      <h2 class="section-title">STATYSTYKI KONTA</h2>
-      <div class="stats">
-        <div class="stat"><strong id="badgeCount">0</strong><span>ODZNAKI</span></div>
-        <div class="stat"><strong id="joinDate">—</strong><span>DATA UTWORZENIA</span></div>
-        <div class="stat"><strong>ACTIVE</strong><span>STATUS KONTA</span></div>
-      </div>
-      <p class="note">Data utworzenia będzie widoczna tylko dla kont, dla których została zapisana. Starszym kontom nie przypisujemy fikcyjnej daty.</p>
-    </section>
+<div class="kicker">LOST MEDIA / MEMBER AREA</div>
+<h1>TWÓJ PROFIL<span style="color:#666">.</span></h1>
 
-    <section class="panel">
-      <h2 class="section-title">TWOJE ODZNAKI</h2>
-      <div class="badges" id="badges"></div>
-    </section>
+<section class="panel">
+<div class="profile-head">
+<div class="avatar" id="avatarBox">
+<span id="avatarFallback">?</span>
+<img id="avatarImage" class="hidden" alt="Avatar użytkownika">
+</div>
 
-    <section class="panel">
-      <h2 class="section-title">INFORMACJE O TOBIE</h2>
-      <div id="readBio" class="empty">Nie dodano opisu.</div>
-      <div id="editForm" class="hidden">
-        <div class="fields">
-          <div class="field-full"><label for="nameInput">NAZWA WYŚWIETLANA</label><input id="nameInput" maxlength="28" placeholder="Twoja nazwa"></div>
-          <div class="field-full"><label for="bioInput">OPIS</label><textarea id="bioInput" maxlength="180" placeholder="Napisz coś o sobie..."></textarea></div>
-          <div class="field-full"><label for="avatarInput">AVATAR (PNG / JPG / WEBP)</label><input id="avatarInput" type="file" accept="image/png,image/jpeg,image/webp"></div>
-        </div>
-        <div class="actions">
-          <button id="saveProfile">ZAPISZ ZMIANY</button>
-          <button class="secondary" id="cancelEdit">ANULUJ</button>
-        </div>
-        <div id="message" role="status"></div>
-        <p class="note">Avatar jest zmniejszany przed zapisaniem. Dane profilu trafiają do localStorage tej przeglądarki.</p>
-      </div>
-    </section>
+<div class="identity">
+<div class="username" id="displayName">USER</div>
+<div class="member">LOST MEDIA MEMBER</div>
+<div class="idline" id="memberId">MEMBER ID: —</div>
+</div>
 
-    <section class="panel">
-      <h2 class="section-title">KONTO</h2>
-      <div class="actions">
-        <button class="danger" id="logout">WYLOGUJ SIĘ</button>
-      </div>
-      <p class="note">To profil prywatny — nie jest publikowany jako publiczna strona użytkownika.</p>
-    </section>
-  </div>
+<button class="secondary" id="editToggle">EDYTUJ PROFIL</button>
+</div>
+</section>
+
+<section class="panel">
+<h2 class="section-title">STATYSTYKI KONTA</h2>
+<div class="stats">
+<div class="stat">
+<strong id="badgeCount">0</strong>
+<span>ODZNAKI</span>
+</div>
+<div class="stat">
+<strong id="joinDate">25.11.2026</strong>
+<span>DATA UTWORZENIA</span>
+</div>
+<div class="stat">
+<strong>ACTIVE</strong>
+<span>STATUS KONTA</span>
+</div>
+</div>
+<p class="note">LOST MEDIA MEMBER wystartowało 25.11.2026.</p>
+</section>
+
+<section class="panel">
+<h2 class="section-title">TWOJE ODZNAKI</h2>
+<div class="badges" id="badges"></div>
+</section>
+
+<section class="panel">
+<h2 class="section-title">INFORMACJE O TOBIE</h2>
+<div id="readBio" class="empty">Nie dodano opisu.</div>
+
+<div id="editForm" class="hidden">
+<div class="fields">
+<div class="field-full">
+<label for="nameInput">NAZWA WYŚWIETLANA</label>
+<input id="nameInput" maxlength="28" placeholder="Twoja nazwa">
+</div>
+
+<div class="field-full">
+<label for="bioInput">OPIS</label>
+<textarea id="bioInput" maxlength="180" placeholder="Napisz coś o sobie..."></textarea>
+</div>
+
+<div class="field-full">
+<label for="avatarInput">AVATAR (PNG / JPG / WEBP)</label>
+<input id="avatarInput" type="file" accept="image/png,image/jpeg,image/webp">
+</div>
+</div>
+
+<div class="actions">
+<button id="saveProfile">ZAPISZ ZMIANY</button>
+<button class="secondary" id="cancelEdit">ANULUJ</button>
+</div>
+
+<div id="message" role="status"></div>
+<p class="note">Avatar jest zmniejszany przed zapisaniem. Dane profilu trafiają do localStorage tej przeglądarki.</p>
+</div>
+</section>
+
+<section class="panel">
+<h2 class="section-title">KONTO</h2>
+<div class="actions">
+<button class="danger" id="logout">WYLOGUJ SIĘ</button>
+</div>
+<p class="note">To profil prywatny — nie jest publikowany jako publiczna strona użytkownika.</p>
+</section>
+
+</div>
 </main>
+
 <footer>LOST MEDIA © 2026</footer>
+
 <script>
 (() => {
-  const ACCOUNTS_KEY = "lostMediaAccounts_v1";
-  const SESSION_KEY = "lostMediaCurrentUser_v1";
-  const gate = document.getElementById("gate");
-  const profile = document.getElementById("profile");
-  const readAccounts = () => {
-    try { return JSON.parse(localStorage.getItem(ACCOUNTS_KEY) || "{}"); }
-    catch (_) { return {}; }
-  };
-  const session = localStorage.getItem(SESSION_KEY) || "";
-  const accounts = readAccounts();
-  const account = session && accounts[session] ? accounts[session] : null;
 
-  if (!account) {
-    gate.classList.remove("hidden");
-    return;
-  }
-  profile.classList.remove("hidden");
+const ACCOUNTS_KEY = "lostMediaAccounts_v1";
+const SESSION_KEY = "lostMediaCurrentUser_v1";
+const DEFAULT_JOIN_DATE = "2026-11-25T12:00:00";
 
-  // Nadajemy identyfikator lokalny tylko raz. Nie jest to globalny numer konta.
-  if (!account.profile) account.profile = {};
-  if (!account.profile.localId) {
-    let hash = 0;
-    for (const ch of session) hash = ((hash << 5) - hash + ch.charCodeAt(0)) | 0;
-    account.profile.localId = "LM-" + String(Math.abs(hash)).padStart(7, "0").slice(-7);
-  }
-  // Data jest ustawiana od teraz tylko dla nowych profili; starszym nie dopisujemy fikcyjnej daty.
-  const persist = () => {
-    accounts[session] = account;
-    localStorage.setItem(ACCOUNTS_KEY, JSON.stringify(accounts));
-  };
-  persist();
+const gate = document.getElementById("gate");
+const profile = document.getElementById("profile");
 
-  const profileData = () => account.profile || {};
-  const displayName = document.getElementById("displayName");
-  const avatarImage = document.getElementById("avatarImage");
-  const avatarFallback = document.getElementById("avatarFallback");
-  const readBio = document.getElementById("readBio");
-  const editForm = document.getElementById("editForm");
-  const message = document.getElementById("message");
+const readAccounts = () => {
+try {
+return JSON.parse(localStorage.getItem(ACCOUNTS_KEY) || "{}");
+} catch (_) {
+return {};
+}
+};
 
-  function render() {
-    const p = profileData();
-    displayName.textContent = p.displayName || account.username || session;
-    document.getElementById("memberId").textContent = "MEMBER ID: " + p.localId;
-    document.getElementById("joinDate").textContent = account.createdAt
-      ? new Date(account.createdAt).toLocaleDateString("pl-PL")
-      : "—";
-    const earned = account.firstDropBadge === true;
-    document.getElementById("badgeCount").textContent = earned ? "1" : "0";
-    document.getElementById("badges").innerHTML = earned
-      ? '<div class="badge-card"><div class="badge-icon">✦</div><strong>FIRST DROP</strong><small>Odznaka pierwszego dropu LOST MEDIA.</small></div>'
-      : '<div class="empty">Nie masz jeszcze żadnych odznak. Zdobyte odznaki pojawią się tutaj.</div>';
-    readBio.textContent = p.bio || "Nie dodano opisu.";
-    if (p.avatar) {
-      avatarImage.src = p.avatar;
-      avatarImage.classList.remove("hidden");
-      avatarFallback.classList.add("hidden");
-    } else {
-      avatarImage.removeAttribute("src");
-      avatarImage.classList.add("hidden");
-      avatarFallback.classList.remove("hidden");
-      avatarFallback.textContent = (p.displayName || account.username || "?").charAt(0).toUpperCase();
-    }
-  }
-  function startEdit() {
-    const p = profileData();
-    document.getElementById("nameInput").value = p.displayName || account.username || "";
-    document.getElementById("bioInput").value = p.bio || "";
-    document.getElementById("avatarInput").value = "";
-    message.textContent = "";
-    editForm.classList.remove("hidden");
-    readBio.classList.add("hidden");
-    document.getElementById("editToggle").classList.add("hidden");
-  }
-  function stopEdit() {
-    editForm.classList.add("hidden");
-    readBio.classList.remove("hidden");
-    document.getElementById("editToggle").classList.remove("hidden");
-  }
-  document.getElementById("editToggle").addEventListener("click", startEdit);
-  document.getElementById("cancelEdit").addEventListener("click", stopEdit);
-  document.getElementById("saveProfile").addEventListener("click", async () => {
-    const name = document.getElementById("nameInput").value.trim();
-    const bio = document.getElementById("bioInput").value.trim();
-    if (name.length < 2) { message.textContent = "Nazwa musi mieć co najmniej 2 znaki."; return; }
-    const file = document.getElementById("avatarInput").files[0];
-    try {
-      let avatar = profileData().avatar || "";
-      if (file) {
-        if (!/^image\/(png|jpeg|webp)$/.test(file.type)) { message.textContent = "Wybierz PNG, JPG lub WEBP."; return; }
-        if (file.size > 5 * 1024 * 1024) { message.textContent = "Plik jest za duży. Maksymalnie 5 MB."; return; }
-        avatar = await resizeImage(file);
-      }
-      account.profile = {...profileData(), displayName:name, bio, avatar};
-      persist();
-      render();
-      stopEdit();
-      message.textContent = "Zapisano profil.";
-    } catch (e) {
-      message.textContent = "Nie udało się zapisać. Możliwe, że localStorage jest pełny.";
-    }
-  });
-  function resizeImage(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onerror = reject;
-      reader.onload = () => {
-        const img = new Image();
-        img.onerror = reject;
-        img.onload = () => {
-          const max = 320, scale = Math.min(1, max / Math.max(img.width, img.height));
-          const canvas = document.createElement("canvas");
-          canvas.width = Math.max(1, Math.round(img.width * scale));
-          canvas.height = Math.max(1, Math.round(img.height * scale));
-          canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
-          resolve(canvas.toDataURL("image/jpeg", .82));
-        };
-        img.src = reader.result;
-      };
-      reader.readAsDataURL(file);
-    });
-  }
-  document.getElementById("logout").addEventListener("click", () => {
-    localStorage.removeItem(SESSION_KEY);
-    location.href = "/";
-  });
-  render();
+const session = localStorage.getItem(SESSION_KEY) || "";
+const accounts = readAccounts();
+const account = session && accounts[session] ? accounts[session] : null;
+
+if (!account) {
+gate.classList.remove("hidden");
+return;
+}
+
+profile.classList.remove("hidden");
+
+if (!account.profile) account.profile = {};
+
+if (!account.profile.localId) {
+let hash = 0;
+for (const ch of session) {
+hash = ((hash << 5) - hash + ch.charCodeAt(0)) | 0;
+}
+account.profile.localId = "LM-" + String(Math.abs(hash)).padStart(7, "0").slice(-7);
+}
+
+/* Wszystkie konta istniejące przy uruchomieniu MEMBER otrzymują datę 25.11.2026. */
+if (!account.createdAt) {
+account.createdAt = DEFAULT_JOIN_DATE;
+}
+
+const persist = () => {
+accounts[session] = account;
+localStorage.setItem(ACCOUNTS_KEY, JSON.stringify(accounts));
+};
+
+persist();
+
+const profileData = () => account.profile || {};
+
+const displayName = document.getElementById("displayName");
+const avatarImage = document.getElementById("avatarImage");
+const avatarFallback = document.getElementById("avatarFallback");
+const readBio = document.getElementById("readBio");
+const editForm = document.getElementById("editForm");
+const message = document.getElementById("message");
+
+function render() {
+const p = profileData();
+
+displayName.textContent = p.displayName || account.username || session;
+document.getElementById("memberId").textContent = "MEMBER ID: " + p.localId;
+
+document.getElementById("joinDate").textContent = "25.11.2026";
+
+const earned = account.firstDropBadge === true;
+
+document.getElementById("badgeCount").textContent = earned ? "1" : "0";
+
+document.getElementById("badges").innerHTML = earned
+? `
+<div class="badge-card">
+<img class="badge-icon" src="/drop1.png" alt="Odznaka pierwszego dropu">
+<strong>FIRST DROP</strong>
+<small>Odznaka pierwszego dropu LOST MEDIA.</small>
+</div>
+`
+: `
+<div class="empty">Nie masz jeszcze żadnych odznak. Zdobyte odznaki pojawią się tutaj.</div>
+`;
+
+readBio.textContent = p.bio || "Nie dodano opisu.";
+
+if (p.avatar) {
+avatarImage.src = p.avatar;
+avatarImage.classList.remove("hidden");
+avatarFallback.classList.add("hidden");
+} else {
+avatarImage.removeAttribute("src");
+avatarImage.classList.add("hidden");
+avatarFallback.classList.remove("hidden");
+avatarFallback.textContent = (p.displayName || account.username || "?").charAt(0).toUpperCase();
+}
+}
+
+function startEdit() {
+const p = profileData();
+
+document.getElementById("nameInput").value = p.displayName || account.username || "";
+document.getElementById("bioInput").value = p.bio || "";
+document.getElementById("avatarInput").value = "";
+
+message.textContent = "";
+editForm.classList.remove("hidden");
+readBio.classList.add("hidden");
+document.getElementById("editToggle").classList.add("hidden");
+}
+
+function stopEdit() {
+editForm.classList.add("hidden");
+readBio.classList.remove("hidden");
+document.getElementById("editToggle").classList.remove("hidden");
+}
+
+document.getElementById("editToggle").addEventListener("click", startEdit);
+document.getElementById("cancelEdit").addEventListener("click", stopEdit);
+
+document.getElementById("saveProfile").addEventListener("click", async () => {
+
+const name = document.getElementById("nameInput").value.trim();
+const bio = document.getElementById("bioInput").value.trim();
+
+if (name.length < 2) {
+message.textContent = "Nazwa musi mieć co najmniej 2 znaki.";
+return;
+}
+
+const file = document.getElementById("avatarInput").files[0];
+
+try {
+
+let avatar = profileData().avatar || "";
+
+if (file) {
+
+if (!/^image\/(png|jpeg|webp)$/.test(file.type)) {
+message.textContent = "Wybierz PNG, JPG lub WEBP.";
+return;
+}
+
+if (file.size > 5 * 1024 * 1024) {
+message.textContent = "Plik jest za duży. Maksymalnie 5 MB.";
+return;
+}
+
+avatar = await resizeImage(file);
+}
+
+account.profile = {
+...profileData(),
+displayName: name,
+bio,
+avatar
+};
+
+persist();
+render();
+stopEdit();
+message.textContent = "Zapisano profil.";
+
+} catch (e) {
+message.textContent = "Nie udało się zapisać. Możliwe, że localStorage jest pełny.";
+}
+
+});
+
+function resizeImage(file) {
+return new Promise((resolve, reject) => {
+
+const reader = new FileReader();
+
+reader.onerror = reject;
+
+reader.onload = () => {
+
+const img = new Image();
+
+img.onerror = reject;
+
+img.onload = () => {
+
+const max = 320;
+const scale = Math.min(1, max / Math.max(img.width, img.height));
+
+const canvas = document.createElement("canvas");
+canvas.width = Math.max(1, Math.round(img.width * scale));
+canvas.height = Math.max(1, Math.round(img.height * scale));
+
+canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
+
+resolve(canvas.toDataURL("image/jpeg", .82));
+
+};
+
+img.src = reader.result;
+};
+
+reader.readAsDataURL(file);
+
+});
+}
+
+document.getElementById("logout").addEventListener("click", () => {
+localStorage.removeItem(SESSION_KEY);
+location.href = "/";
+});
+
+render();
+
 })();
 </script>
+
 </body>
 </html>
