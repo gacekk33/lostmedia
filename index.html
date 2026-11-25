@@ -1854,5 +1854,39 @@ updateAccountUI();
 </div>
 </div>
 
+
+
+<!-- UKRYTA WSKAZÓWKA SECRET PAGE — CELOWO NA SAMYM DOLE STRONY -->
+<style>
+.secretpage-hidden-zone {
+    width: 100%;
+    height: 11000px;
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 0 20px 35px;
+    box-sizing: border-box;
+}
+.secretpage-hidden-link {
+    display: inline-block;
+    opacity: .82;
+    line-height: 0;
+    transition: opacity .25s ease;
+}
+.secretpage-hidden-link:hover { opacity: 1; }
+.secretpage-hidden-link img {
+    display: block;
+    width: 150px;
+    max-width: 40vw;
+    height: auto;
+}
+</style>
+<div class="secretpage-hidden-zone">
+    <a class="secretpage-hidden-link" href="/secretpage/" aria-label="secretpage">
+        <img src="secretpage.png" alt="">
+    </a>
+</div>
+
 </body>
 </html>
