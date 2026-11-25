@@ -21,6 +21,13 @@
     .eyebrow { color:#9d3038; font:11px monospace; letter-spacing:3px; }
     h1 { margin:12px 0 8px; font-size:clamp(28px,5vw,48px); letter-spacing:2px; font-weight:800; }
     .sub { margin:0; color:#777; font:12px monospace; letter-spacing:1px; }
+    .countdown-wrap { margin:12px auto 34px; width:min(360px,100%); text-align:center; color:#ef2938; font-family:monospace; }
+    .countdown-mark { font-size:24px; line-height:1; letter-spacing:8px; text-shadow:0 0 12px rgba(239,41,56,.55); }
+    .countdown-label { margin:9px 0 12px; font-size:9px; letter-spacing:4px; color:#d42b38; }
+    .countdown-box { border:1px solid #e21f31; padding:11px 9px 8px; box-shadow:0 0 18px rgba(226,31,49,.13), inset 0 0 16px rgba(226,31,49,.07); background:rgba(45,0,5,.16); }
+    .countdown-time { font-size:clamp(25px,6vw,38px); letter-spacing:3px; line-height:1.1; text-shadow:0 0 10px rgba(255,35,55,.55); font-variant-numeric:tabular-nums; }
+    .countdown-units { display:flex; justify-content:space-around; margin-top:6px; color:#a92732; font-size:8px; letter-spacing:2px; }
+    .countdown-foot { margin-top:8px; color:#77232b; font-size:8px; letter-spacing:2px; }
     .section-head { display:flex; align-items:center; gap:14px; margin:32px 0 16px; }
     .section-head h2 { margin:0; font-size:13px; letter-spacing:3px; white-space:nowrap; }
     .section-head:after { content:""; height:1px; background:var(--line); flex:1; }
@@ -56,6 +63,16 @@
       <p class="sub">some files may be damaged or incomplete</p>
     </section>
 
+    <section class="countdown-wrap" aria-label="Odliczanie do wydarzenia">
+      <div class="countdown-mark">◉</div>
+      <div class="countdown-label">TRANSMISSION // 003</div>
+      <div class="countdown-box">
+        <div class="countdown-time" id="countdownTime">00:00:00:00</div>
+        <div class="countdown-units"><span>DAYS</span><span>HRS</span><span>MIN</span><span>SEC</span></div>
+      </div>
+      <div class="countdown-foot" id="countdownStatus">TARGET // 30.11.2026 — 20:33</div>
+    </section>
+
     <div class="section-head"><h2>IMAGE FILES</h2></div>
     <section class="gallery" aria-label="Galeria zdjęć">
       <button class="photo" data-image="../secret1.png" aria-label="Otwórz secret1.png"><img src="../secret1.png" alt="Secret image 01"><span>IMG_001 // SECRET1.PNG</span></button>
@@ -80,6 +97,26 @@
     <img id="viewerImage" src="" alt="Powiększone zdjęcie">
   </div>
   <script>
+    // Odliczanie do 30 listopada 2026, godz. 20:33 czasu polskiego.
+    const countdownTarget = new Date('2026-11-30T20:33:00+01:00').getTime();
+    const countdownTime = document.getElementById('countdownTime');
+    const countdownStatus = document.getElementById('countdownStatus');
+    function updateCountdown() {
+      const remaining = countdownTarget - Date.now();
+      if (remaining <= 0) {
+        countdownTime.textContent = '00:00:00:00';
+        countdownStatus.textContent = 'TRANSMISSION // COMPLETE';
+        return;
+      }
+      const days = Math.floor(remaining / 86400000);
+      const hours = Math.floor((remaining % 86400000) / 3600000);
+      const minutes = Math.floor((remaining % 3600000) / 60000);
+      const seconds = Math.floor((remaining % 60000) / 1000);
+      countdownTime.textContent = [days, hours, minutes, seconds].map(value => String(value).padStart(2, '0')).join(':');
+    }
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
     const viewer = document.getElementById('viewer');
     const viewerImage = document.getElementById('viewerImage');
     document.querySelectorAll('.photo').forEach(button => {
