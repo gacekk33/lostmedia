@@ -860,12 +860,32 @@ body {
     .badge-screen h2 { font-size: 15px; }
 }
 
+
+/* KONTA LOST MEDIA */
+.account-status{position:fixed;top:14px;right:16px;z-index:101;display:flex;align-items:center;gap:9px;color:#aaa;font-size:11px}
+.account-status button,.auth-actions button{border:1px solid #383838;background:#151515;color:#ddd;padding:8px 11px;font:inherit;cursor:pointer}
+.account-status button:hover,.auth-actions button:hover{color:white;border-color:#777}
+.auth-overlay{position:fixed;inset:0;z-index:100010;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.88)}
+.auth-overlay.active{display:flex}
+.auth-box{width:min(360px,100%);background:#101010;border:1px solid #383838;padding:25px;display:flex;flex-direction:column;gap:13px}
+.auth-box h2{font-size:17px;font-weight:normal;letter-spacing:1px;text-align:center;margin-bottom:5px}
+.auth-box input{width:100%;background:#1b1b1b;border:1px solid #383838;color:white;padding:12px;outline:none}
+.auth-actions{display:flex;gap:8px}.auth-actions button{flex:1}
+.auth-message{min-height:16px;color:#aaa;font-size:11px;text-align:center}
+.auth-close{align-self:center;background:transparent;border:0;color:#888;cursor:pointer;padding:5px}
+@media(max-width:600px){.account-status{top:48px;right:8px}}
+
 </style>
 </head>
 
 <body>
 
 <button class="badges-home-button" type="button" onclick="openBadgeCollection()">zobacz swoje odznaki</button>
+<div class="account-status">
+<span id="accountLabel">niezalogowano</span>
+<button type="button" id="accountAction" onclick="openAuth()">zaloguj / zarejestruj</button>
+</div>
+
 
 <div class="maintenance" id="maintenance">
     <div class="maintenance-content">
@@ -1609,51 +1629,125 @@ function order(type) {
 
 
 
-/* LOST MEDIA MEMBER */
-let isMember = false;
+/* KONTA + LOST MEDIA MEMBER + ODZNAKI
+   Wersja front-end: konta zapisują się lokalnie w tej przeglądarce. */
 
+// Reset poprzedniego systemu MEMBER i starych odznak na tym urządzeniu.
+// Nie usuwa danych z innych urządzeń ani z serwera.
 try {
-    isMember = localStorage.getItem("lostMediaMember") === "true";
-} catch (error) {
-    console.log("Nie można odczytać statusu member.");
+    localStorage.removeItem("lostMediaMember");
+    localStorage.removeItem("lostMediaFirstDropBadge");
+} catch (error) {}
+
+const ACCOUNTS_STORAGE_KEY = "lostMediaAccounts_v1";
+const SESSION_STORAGE_KEY = "lostMediaCurrentUser_v1";
+
+function readAccounts() {
+    try { return JSON.parse(localStorage.getItem(ACCOUNTS_STORAGE_KEY) || "{}"); }
+    catch (error) { return {}; }
+}
+function saveAccounts(value) {
+    localStorage.setItem(ACCOUNTS_STORAGE_KEY, JSON.stringify(value));
+}
+function getCurrentUsername() {
+    try { return localStorage.getItem(SESSION_STORAGE_KEY) || ""; }
+    catch (error) { return ""; }
 }
 
+let currentUsername = getCurrentUsername();
+let accounts = readAccounts();
+
+function currentAccount() {
+    accounts = readAccounts();
+    return currentUsername && accounts[currentUsername] ? accounts[currentUsername] : null;
+}
+function openAuth() {
+    document.getElementById("authMessage").textContent = "";
+    document.getElementById("authOverlay").classList.add("active");
+    document.getElementById("authOverlay").setAttribute("aria-hidden", "false");
+}
+function closeAuth() {
+    document.getElementById("authOverlay").classList.remove("active");
+    document.getElementById("authOverlay").setAttribute("aria-hidden", "true");
+}
+function registerAccount() {
+    const username = document.getElementById("authUsername").value.trim();
+    const password = document.getElementById("authPassword").value;
+    const message = document.getElementById("authMessage");
+    if (!/^[a-zA-Z0-9_]{3,24}$/.test(username)) {
+        message.textContent = "login: 3–24 znaki, litery, cyfry lub _"; return;
+    }
+    if (password.length < 6) {
+        message.textContent = "hasło musi mieć minimum 6 znaków"; return;
+    }
+    accounts = readAccounts();
+    const key = username.toLowerCase();
+    if (accounts[key]) { message.textContent = "taki login jest już zajęty"; return; }
+    accounts[key] = { username: username, password: password, firstDropBadge: false };
+    try {
+        saveAccounts(accounts);
+        currentUsername = key;
+        localStorage.setItem(SESSION_STORAGE_KEY, key);
+        updateMemberButton(); updateBadgeClaimButton(); updateAccountUI();
+        message.textContent = "konto utworzone — jesteś zalogowany";
+        setTimeout(closeAuth, 700);
+    } catch (error) { message.textContent = "nie udało się zapisać konta"; }
+}
+function loginAccount() {
+    const username = document.getElementById("authUsername").value.trim().toLowerCase();
+    const password = document.getElementById("authPassword").value;
+    const message = document.getElementById("authMessage");
+    accounts = readAccounts();
+    const account = accounts[username];
+    if (!account || account.password !== password) {
+        message.textContent = "nieprawidłowy login lub hasło"; return;
+    }
+    currentUsername = username;
+    try {
+        localStorage.setItem(SESSION_STORAGE_KEY, username);
+        updateMemberButton(); updateBadgeClaimButton(); updateAccountUI();
+        message.textContent = "zalogowano";
+        setTimeout(closeAuth, 500);
+    } catch (error) { message.textContent = "nie udało się zalogować"; }
+}
+function logoutAccount() {
+    currentUsername = "";
+    try { localStorage.removeItem(SESSION_STORAGE_KEY); } catch (error) {}
+    updateMemberButton(); updateBadgeClaimButton(); updateAccountUI();
+}
+function updateAccountUI() {
+    const account = currentAccount();
+    const label = document.getElementById("accountLabel");
+    const action = document.getElementById("accountAction");
+    if (account) {
+        label.textContent = account.username + " • member";
+        action.textContent = "wyloguj";
+        action.onclick = logoutAccount;
+    } else {
+        label.textContent = "niezalogowano";
+        action.textContent = "zaloguj / zarejestruj";
+        action.onclick = openAuth;
+    }
+}
 function updateMemberButton() {
     const text = document.getElementById("memberText");
-    if (!text) return;
-
-    text.textContent = isMember
-        ? "już jesteś lostmedia member"
-        : "zostań lostmedia member";
+    if (text) text.textContent = currentAccount()
+        ? "już jesteś lostmedia member" : "zostań lostmedia member";
 }
-
 function joinMember() {
-    if (isMember) return;
-
-    isMember = true;
-
-    try {
-        localStorage.setItem("lostMediaMember", "true");
-    } catch (error) {
-        console.log("Nie można zapisać statusu member.");
-    }
-
-    updateMemberButton();
+    if (currentAccount()) { alert("jesteś już zalogowany jako lostmedia member."); return; }
+    openAuth();
 }
 
-/* ODZNAKA PIERWSZEGO DROPU */
 let hasFirstDropBadge = false;
-
-try {
-    hasFirstDropBadge = localStorage.getItem("lostMediaFirstDropBadge") === "true";
-} catch (error) {
-    console.log("Nie można odczytać odznak.");
+function refreshBadgeState() {
+    const account = currentAccount();
+    hasFirstDropBadge = !!(account && account.firstDropBadge);
 }
-
 function updateBadgeClaimButton() {
+    refreshBadgeState();
     const button = document.getElementById("claimBadgeButton");
     if (!button) return;
-
     if (hasFirstDropBadge) {
         button.textContent = "odebrano nagrodę";
         button.classList.add("claimed");
@@ -1664,64 +1758,52 @@ function updateBadgeClaimButton() {
         button.disabled = false;
     }
 }
-
 function claimFirstDropBadge() {
-    if (!isMember) {
-        alert("aby odebrać odznakę, musisz być lostmedia member.");
-        return;
+    const account = currentAccount();
+    if (!account) {
+        alert("aby odebrać odznakę, musisz się zarejestrować lub zalogować.");
+        openAuth(); return;
     }
-
-    if (hasFirstDropBadge) return;
-
+    if (account.firstDropBadge) return;
+    accounts = readAccounts();
+    accounts[currentUsername].firstDropBadge = true;
+    try { saveAccounts(accounts); }
+    catch (error) { alert("nie udało się zapisać odznaki."); return; }
     hasFirstDropBadge = true;
-
-    try {
-        localStorage.setItem("lostMediaFirstDropBadge", "true");
-    } catch (error) {
-        console.log("Nie można zapisać odznaki.");
-    }
-
     updateBadgeClaimButton();
     document.getElementById("badgeRewardScreen").classList.add("active");
     document.getElementById("badgeRewardScreen").setAttribute("aria-hidden", "false");
 }
-
 function openBadgeCollection() {
     const content = document.getElementById("badgeCollectionContent");
     content.innerHTML = "";
-
+    refreshBadgeState();
     if (hasFirstDropBadge) {
         const image = document.createElement("img");
-        image.src = "drop1.png";
-        image.alt = "Odznaka pierwszego dropu";
-
+        image.src = "drop1.png"; image.alt = "Odznaka pierwszego dropu";
         const label = document.createElement("span");
         label.textContent = "odznaka pierwszego dropu";
-
-        content.appendChild(image);
-        content.appendChild(label);
+        content.appendChild(image); content.appendChild(label);
     } else {
         const empty = document.createElement("span");
-        empty.textContent = "nie masz jeszcze żadnych odznak";
+        empty.textContent = currentAccount()
+            ? "nie masz jeszcze żadnych odznak"
+            : "zaloguj się, aby zobaczyć swoje odznaki";
         content.appendChild(empty);
     }
-
     document.getElementById("badgeCollectionScreen").classList.add("active");
     document.getElementById("badgeCollectionScreen").setAttribute("aria-hidden", "false");
 }
-
 function closeBadgeCollection() {
     const screen = document.getElementById("badgeCollectionScreen");
     screen.classList.remove("active");
     screen.setAttribute("aria-hidden", "true");
 }
-
-function returnToHome() {
-    window.location.href = "/";
-}
+function returnToHome() { window.location.href = "/"; }
 
 updateBadgeClaimButton();
 updateMemberButton();
+updateAccountUI();
 
 </script>
 
@@ -1755,6 +1837,21 @@ updateMemberButton();
     <h2>twoje odznaki</h2>
     <div class="badge-collection-item" id="badgeCollectionContent"></div>
     <button class="badge-return" type="button" onclick="closeBadgeCollection()">wróć do strony głównej</button>
+</div>
+
+
+<div class="auth-overlay" id="authOverlay" aria-hidden="true">
+<div class="auth-box">
+<h2>konto lost media</h2>
+<input id="authUsername" type="text" maxlength="24" placeholder="login" autocomplete="username">
+<input id="authPassword" type="password" maxlength="100" placeholder="hasło" autocomplete="current-password">
+<div class="auth-actions">
+<button type="button" onclick="registerAccount()">zarejestruj</button>
+<button type="button" onclick="loginAccount()">zaloguj</button>
+</div>
+<div class="auth-message" id="authMessage"></div>
+<button class="auth-close" type="button" onclick="closeAuth()">zamknij</button>
+</div>
 </div>
 
 </body>
